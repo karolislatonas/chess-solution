@@ -5,11 +5,17 @@ namespace Chess.Domain.Movement
 {
     public class MovesLog
     {
-        private List<PieceMove> moves;
+        private readonly List<PieceMove> moves;
 
-        public MovesLog()
+        public MovesLog() :
+            this(Enumerable.Empty<PieceMove>())
         {
-            moves = new List<PieceMove>();
+            
+        }
+
+        public MovesLog(IEnumerable<PieceMove> pieceMoves)
+        {
+            moves = new List<PieceMove>(pieceMoves);
         }
 
         public void AddMove(PieceMove pieceMove)

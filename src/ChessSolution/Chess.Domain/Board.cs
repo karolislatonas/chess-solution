@@ -16,6 +16,12 @@ namespace Chess.Domain
             pieces = GetInitialPieciesLocations();
         }
 
+        public void ApplyMoves(IEnumerable<PieceMove> pieceMoves)
+        {
+            foreach (var pieceMove in pieceMoves)
+                ApplyMove(pieceMove);
+        }
+
         public void ApplyMove(PieceMove pieceMove)
         {
             MovePieceFromTo(pieceMove.From, pieceMove.To);

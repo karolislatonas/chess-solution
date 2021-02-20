@@ -2,10 +2,12 @@
 {
     public class PieceMover
     {
+        private readonly Board board;
         private readonly MovesLog movesLog;
 
-        public PieceMover(MovesLog movesLog)
+        public PieceMover(Board board, MovesLog movesLog)
         {
+            this.board = board;
             this.movesLog = movesLog;
         }
 

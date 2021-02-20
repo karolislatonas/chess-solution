@@ -1,4 +1,4 @@
-﻿using Chess.Data.Movement;
+﻿using Chess.Domain.Movement;
 using System.Collections.Concurrent;
 using System.Linq;
 
@@ -6,22 +6,23 @@ namespace Chess.Data.InMemory
 {
     public class InMemoryMovesRepository : IMovesRepository
     {
-        private readonly ConcurrentBag<PieceMoveDto> moves;
+        private readonly ConcurrentBag<(string gameId, PieceMove move)> moves;
 
         public InMemoryMovesRepository()
         {
-            moves = new ConcurrentBag<PieceMoveDto>();
+            moves = new ConcurrentBag<(string gameId, PieceMove move)>();
         }
 
-        public void AddMove(PieceMoveDto pieceMove)
+        public void AddMove(string gameId, PieceMove pieceMove)
         {
-            moves.Add(pieceMove);
+            moves.Add((gameId, pieceMove));
         }
 
-        public PieceMoveDto[] GetGameMoves(int gameId)
+        public PieceMove[] GetGameMoves(string gameId)
         {
             return moves
-                .Where(m => m.GameId == gameId)
+                .Where(m => m.gameId == gameId)
+                .Select(m => m.move)
                 .OrderBy(m => m.SequenceNumber)
                 .ToArray();
         }

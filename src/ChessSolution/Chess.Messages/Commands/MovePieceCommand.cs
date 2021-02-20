@@ -2,8 +2,10 @@
 {
     public class MovePieceCommand
     {
-        public LocationDto From { get; }
+        public string GameId { get; set; }
 
-        public LocationDto To { get; }
+        public LocationDto From { get; set; }
+
+        public LocationDto To { get; set; }
     }
 }
