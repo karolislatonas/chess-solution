@@ -15,7 +15,7 @@ namespace Chess.WebUI.Translations
 
         private static Location AsDomain(this LocationDto location)
         {
-            return new Location(location.X, location.Y);
+            return new Location(location.Column, location.Row);
         }
     }
 }

@@ -19,8 +19,8 @@ namespace Chess.Api.Translators
         {
             return new Messages.LocationDto
             {
-                X = location.X,
-                Y = location.Y
+                Column = location.Column,
+                Row = location.Row
             };
         }
     }

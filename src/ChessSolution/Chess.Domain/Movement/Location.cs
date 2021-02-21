@@ -6,15 +6,15 @@ namespace Chess.Domain.Movement
     [DebuggerDisplay("X-{X}, Y-{Y}")]
     public class Location : IEquatable<Location>
     {
-        public Location(int x, int y)
+        public Location(int column, int row)
         {
-            X = x;
-            Y = y;
+            Column = column;
+            Row = row;
         }
 
-        public int X { get; }
+        public int Column { get; }
 
-        public int Y { get; }
+        public int Row { get; }
 
         public bool Equals(Location other)
         {
@@ -28,7 +28,7 @@ namespace Chess.Domain.Movement
 
         public override int GetHashCode()
         {
-            return 17 * X.GetHashCode() ^ Y.GetHashCode(); 
+            return 17 ^ Column.GetHashCode() ^ Row.GetHashCode(); 
         }
 
         public static bool operator ==(Location location, Location otherLocation)
@@ -39,8 +39,8 @@ namespace Chess.Domain.Movement
             if (ReferenceEquals(location, null) || ReferenceEquals(otherLocation, null))
                 return false;
 
-            return location.X == otherLocation.X &&
-                   location.Y == otherLocation.Y; 
+            return location.Column == otherLocation.Column &&
+                   location.Row == otherLocation.Row; 
         }
 
         public static bool operator !=(Location location, Location otherLocation)

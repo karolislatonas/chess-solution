@@ -25,12 +25,12 @@ namespace Chess.WebUI.ViewModels
 
         public IEnumerable<PieceLocation> Pieces => board.GetAllPieces();
 
-        public async Task MovePiece(int fromX, int fromY, int toX, int toY)
+        public async Task MovePiece(int fromColumn, int fromRow, int toColumn, int toRow)
         {
             var pieceMove = new PieceMoveDto
             {
-                From = new LocationDto { X = fromX, Y = fromY },
-                To = new LocationDto { X = toX, Y = toY }
+                From = new LocationDto { Column = fromColumn, Row = fromRow },
+                To = new LocationDto { Column = toColumn, Row = toRow }
             };
 
             await movementService.MovePieceAsync(gameId, pieceMove);

@@ -28,8 +28,8 @@ namespace Chess.Api.Translators
         {
             return new LocationDto
             {
-                X = location.X,
-                Y = location.Y
+                Column = location.Column,
+                Row = location.Row
             };
         }
     }

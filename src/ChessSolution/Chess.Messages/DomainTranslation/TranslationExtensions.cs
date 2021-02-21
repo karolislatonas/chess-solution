@@ -6,7 +6,7 @@ namespace Chess.Messages.DomainTranslation
     {
         public static Location ToDomain(this LocationDto locationDto)
         {
-            return new Location(locationDto.X, locationDto.Y);
+            return new Location(locationDto.Column, locationDto.Row);
         }
     }
 }
