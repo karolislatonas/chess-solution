@@ -1,0 +1,42 @@
+﻿.board {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid black;
+}
+
+.row-even {
+    display: flex;
+    flex-direction: row;
+}
+
+    .row-even > div {
+        width: 64px;
+        height: 64px;
+    }
+
+
+        .row-even > div:nth-child(odd) {
+            background: white;
+        }
+
+        .row-even > div:nth-child(even) {
+            background: green;
+        }
+
+.row-odd {
+    display: flex;
+    flex-direction: row;
+}
+
+    .row-odd > div {
+        width: 64px;
+        height: 64px;
+    }
+
+        .row-odd > div:nth-child(odd) {
+            background: green;
+        }
+
+        .row-odd > div:nth-child(even) {
+            background: white;
+        }

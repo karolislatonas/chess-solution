@@ -1,3 +1,15 @@
-﻿
+﻿@using Domain.Movement;
 
-<h3>BoardView: @GameId</h3>
+<div class="board">
+    @for(var row = 8; row >= 1; row--)
+    {
+        <div class="@(row.IsEven() ? "row-even" : "row-odd" )" >
+            @for(var column = 1; column <= 8; column++)
+            {
+                var piece = BoardViewModel.Board.GetPieceAt(new Location(column, row));
+
+                <BoardCellView Row="@row" Column="@column" Piece="@piece" />
+            }
+        </div>
+    }
+</div>

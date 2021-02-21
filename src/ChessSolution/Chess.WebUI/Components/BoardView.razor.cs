@@ -10,11 +10,11 @@ namespace Chess.WebUI.Components
         public string GameId { get; set; }
 
         [Inject]
-        public BoardViewModel GameViewModel { get; set; }
+        public BoardViewModel BoardViewModel { get; set; }
 
         protected async override Task OnInitializedAsync()
         {
-            await GameViewModel.InitialiseAsync(GameId);
+            await BoardViewModel.InitialiseAsync(GameId);
         }
     }
 }

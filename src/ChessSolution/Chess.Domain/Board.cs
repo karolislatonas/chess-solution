@@ -16,9 +16,14 @@ namespace Chess.Domain
             pieces = GetInitialPieciesLocations();
         }
 
-        public IEnumerable<PieceLocation> GetAllPieces()
+        public IPiece GetPieceAt(Location location)
         {
-            return pieces.Select(kvp => new PieceLocation(kvp.Value, kvp.Key));
+            if(pieces.TryGetValue(location, out var piece))
+            {
+                return piece;
+            }
+
+            return null;
         }
 
         public void ApplyMoves(IEnumerable<PieceMove> pieceMoves)
@@ -45,28 +50,27 @@ namespace Chess.Domain
 
         private static Dictionary<Location, IPiece> GetInitialPieciesLocations()
         {
-            return CreatePieciesLineAt(0)
-                .Concat(CreatePawnsLineAt(1))
-                .Concat(CreatePieciesLineAt(7))
-                .Concat(CreatePawnsLineAt(6))
+            return CreatePieciesInRow(1)
+                .Concat(CreatePawnsInRow(2))
+                .Concat(CreatePieciesInRow(8))
+                .Concat(CreatePawnsInRow(7))
                 .ToDictionary(x => x.location, x => x.piece);
         }
 
-        private static IEnumerable<(Location location, IPiece piece)> CreatePieciesLineAt(int lineIndex)
+        private static IEnumerable<(Location location, IPiece piece)> CreatePieciesInRow(int lineIndex)
         {
-            yield return (LocationAt(0, lineIndex), new Rook());
-            yield return (LocationAt(1, lineIndex), new Knight());
-            yield return (LocationAt(2, lineIndex), new Bishop());
-            yield return (LocationAt(3, lineIndex), new Queen());
-            yield return (LocationAt(4, lineIndex), new King());
-            yield return (LocationAt(5, lineIndex), new Bishop());
-            yield return (LocationAt(6, lineIndex), new Knight());
-            yield return (LocationAt(7, lineIndex), new Rook());
+            yield return (LocationAt(1, lineIndex), new Rook());
+            yield return (LocationAt(2, lineIndex), new Knight());
+            yield return (LocationAt(3, lineIndex), new Bishop());
+            yield return (LocationAt(4, lineIndex), new Queen());
+            yield return (LocationAt(5, lineIndex), new King());
+            yield return (LocationAt(6, lineIndex), new Bishop());
+            yield return (LocationAt(7, lineIndex), new Knight());
+            yield return (LocationAt(8, lineIndex), new Rook());
         }
 
-        private static IEnumerable<(Location location, IPiece piece)> CreatePawnsLineAt(int lineIndex)
+        private static IEnumerable<(Location location, IPiece piece)> CreatePawnsInRow(int lineIndex)
         {
-            yield return (LocationAt(0, lineIndex), new Pawn());
             yield return (LocationAt(1, lineIndex), new Pawn());
             yield return (LocationAt(2, lineIndex), new Pawn());
             yield return (LocationAt(3, lineIndex), new Pawn());
@@ -74,6 +78,7 @@ namespace Chess.Domain
             yield return (LocationAt(5, lineIndex), new Pawn());
             yield return (LocationAt(6, lineIndex), new Pawn());
             yield return (LocationAt(7, lineIndex), new Pawn());
+            yield return (LocationAt(8, lineIndex), new Pawn());
         }
     }
 }

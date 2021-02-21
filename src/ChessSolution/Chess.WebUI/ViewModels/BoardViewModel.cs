@@ -2,6 +2,7 @@
 using Chess.Api.DataContracts;
 using Chess.Domain;
 using Chess.Domain.Movement;
+using Chess.Domain.Pieces;
 using Chess.WebUI.Translations;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace Chess.WebUI.ViewModels
     public class BoardViewModel
     {
         private readonly MovementService movementService;
-        private readonly Board board;
 
         private string gameId;
 
@@ -20,10 +20,10 @@ namespace Chess.WebUI.ViewModels
         {
             this.movementService = movementService;
 
-            board = new Board();
+            Board = new Board();
         }
-
-        public IEnumerable<PieceLocation> Pieces => board.GetAllPieces();
+                
+        public Board Board { get; }
 
         public async Task MovePiece(int fromColumn, int fromRow, int toColumn, int toRow)
         {
@@ -40,7 +40,7 @@ namespace Chess.WebUI.ViewModels
         {
             gameId = initialiseGameId;
 
-            await InitialiseMovesAsync();
+            //await InitialiseMovesAsync();
         }
 
         private async Task InitialiseMovesAsync()
@@ -49,7 +49,7 @@ namespace Chess.WebUI.ViewModels
 
             var moves = movesResponse.Moves.Select(m => m.AsDomain());
 
-            board.ApplyMoves(moves);
+            Board.ApplyMoves(moves);
         }
         
     }
