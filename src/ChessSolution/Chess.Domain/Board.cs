@@ -16,6 +16,11 @@ namespace Chess.Domain
             pieces = GetInitialPieciesLocations();
         }
 
+        public IEnumerable<PieceLocation> GetAllPieces()
+        {
+            return pieces.Select(kvp => new PieceLocation(kvp.Value, kvp.Key));
+        }
+
         public void ApplyMoves(IEnumerable<PieceMove> pieceMoves)
         {
             foreach (var pieceMove in pieceMoves)

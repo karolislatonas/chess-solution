@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Chess.Api.Controllers
 {
-    [Route("api/game/{gameId}")]
+    [Route("api/game/{gameId}/moves")]
     public class MoveController : ControllerBase
     {
         private readonly IMovesRepository moveRepository;
@@ -17,7 +17,7 @@ namespace Chess.Api.Controllers
             this.moveRepository = moveRepository;
         }
 
-        [HttpGet("moves")]
+        [HttpGet]
         public IActionResult GetGameMoves(string gameId)
         {
             var allGameMoves = moveRepository.GetGameMoves(gameId);
@@ -31,13 +31,13 @@ namespace Chess.Api.Controllers
             return Ok(response);
         }
 
-        [HttpGet("move/{sequenceNumber}")]
+        [HttpGet("{sequenceNumber}")]
         public IActionResult GetMove(string gameId, int sequenceNumber)
         {
             return Ok(GetPieceMoveResponse(gameId, sequenceNumber));
         }
 
-        [HttpPost("move")]
+        [HttpPost]
         public IActionResult MovePiece(string gameId, [FromBody] MovePieceRequestDto movePieceRequest)
         {
             var command = movePieceRequest.AsCommand(gameId);

@@ -15,7 +15,7 @@ namespace Chess.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:6000");
+                    webBuilder.UseUrls("http://*:6001");
                 });
     }
 }
