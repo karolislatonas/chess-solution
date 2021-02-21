@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Messages", "Chess.Mes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.UseCases", "Chess.UseCases\Chess.UseCases.csproj", "{816A1EC9-00FD-4FC0-8457-B25A1AFB5C61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Api.DataContracts", "Chess.Api.DataContracts\Chess.Api.DataContracts.csproj", "{BCD46410-A978-47F8-832C-2EA3F980C40F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Api.DataContracts", "Chess.Api.DataContracts\Chess.Api.DataContracts.csproj", "{BCD46410-A978-47F8-832C-2EA3F980C40F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.WebUI", "Chess.WebUI\Chess.WebUI.csproj", "{5F0AF21A-0D6F-4924-A2B2-1A3102520D67}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F0AF21A-0D6F-4924-A2B2-1A3102520D67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F0AF21A-0D6F-4924-A2B2-1A3102520D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F0AF21A-0D6F-4924-A2B2-1A3102520D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F0AF21A-0D6F-4924-A2B2-1A3102520D67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
