@@ -4,9 +4,9 @@
     {
         public Game(string id)
         {
-            Id = id;
+            GameId = id;
         }
 
-        public string Id { get; }
+        public string GameId { get; }
     }
 }

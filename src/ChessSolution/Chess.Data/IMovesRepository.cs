@@ -6,6 +6,8 @@ namespace Chess.Data
     {
         PieceMove[] GetGameMoves(string gameId);
 
+        PieceMove GetMove(string gameId, int sequenceNumber);
+
         void AddMove(string gameId, PieceMove pieceMove);
     }
 }

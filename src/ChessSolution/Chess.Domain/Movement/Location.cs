@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Chess.Domain.Movement
 {
+    [DebuggerDisplay("X-{X}, Y-{Y}")]
     public class Location : IEquatable<Location>
     {
         public Location(int x, int y)
@@ -31,14 +33,14 @@ namespace Chess.Domain.Movement
 
         public static bool operator ==(Location location, Location otherLocation)
         {
-            if (location == null && otherLocation == null)
+            if (ReferenceEquals(location, null) && ReferenceEquals(otherLocation, null))
                 return true;
 
-            if (location == null || otherLocation == null)
+            if (ReferenceEquals(location, null) || ReferenceEquals(otherLocation, null))
                 return false;
 
-            return location.X == location.X &&
-                   location.Y == location.Y; 
+            return location.X == otherLocation.X &&
+                   location.Y == otherLocation.Y; 
         }
 
         public static bool operator !=(Location location, Location otherLocation)

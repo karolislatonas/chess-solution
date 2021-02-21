@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Domain", "Chess.Domain\Chess.Domain.csproj", "{E3ECF777-6DAF-494A-BBA8-015990CC20E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Domain", "Chess.Domain\Chess.Domain.csproj", "{E3ECF777-6DAF-494A-BBA8-015990CC20E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Data", "Chess.Data\Chess.Data.csproj", "{18A28ADA-ECAE-4750-9BBD-2AC49FD18227}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Data", "Chess.Data\Chess.Data.csproj", "{18A28ADA-ECAE-4750-9BBD-2AC49FD18227}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Data.InMemory", "Chess.Data.InMemory\Chess.Data.InMemory.csproj", "{56985C93-29FD-469D-B5F9-5899E0EB0B21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Data.InMemory", "Chess.Data.InMemory\Chess.Data.InMemory.csproj", "{56985C93-29FD-469D-B5F9-5899E0EB0B21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Api", "Chess.Api\Chess.Api.csproj", "{EC922A5D-034B-421D-BC8C-7A90E0C4E44F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Api", "Chess.Api\Chess.Api.csproj", "{EC922A5D-034B-421D-BC8C-7A90E0C4E44F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Messages", "Chess.Messages\Chess.Messages.csproj", "{0A0247CA-9AEB-4A18-83C1-5E51AEDEC487}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Messages", "Chess.Messages\Chess.Messages.csproj", "{0A0247CA-9AEB-4A18-83C1-5E51AEDEC487}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.UseCases", "Chess.UseCases\Chess.UseCases.csproj", "{816A1EC9-00FD-4FC0-8457-B25A1AFB5C61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.UseCases", "Chess.UseCases\Chess.UseCases.csproj", "{816A1EC9-00FD-4FC0-8457-B25A1AFB5C61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Api.DataContracts", "Chess.Api.DataContracts\Chess.Api.DataContracts.csproj", "{BCD46410-A978-47F8-832C-2EA3F980C40F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{816A1EC9-00FD-4FC0-8457-B25A1AFB5C61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{816A1EC9-00FD-4FC0-8457-B25A1AFB5C61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{816A1EC9-00FD-4FC0-8457-B25A1AFB5C61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD46410-A978-47F8-832C-2EA3F980C40F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

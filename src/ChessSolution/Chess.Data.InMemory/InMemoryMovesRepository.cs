@@ -26,5 +26,13 @@ namespace Chess.Data.InMemory
                 .OrderBy(m => m.SequenceNumber)
                 .ToArray();
         }
+
+        public PieceMove GetMove(string gameId, int sequenceNumber)
+        {
+            return moves
+                .Where(m => m.gameId == gameId)
+                .Select(m => m.move)
+                .Single(m => m.SequenceNumber == sequenceNumber);
+        }
     }
 }

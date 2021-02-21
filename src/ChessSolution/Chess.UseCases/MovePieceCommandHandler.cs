@@ -6,7 +6,7 @@ using Chess.Messages.DomainTranslation;
 
 namespace Chess.UseCases
 {
-    public class MovePieceCommandHandler : CommandHandlerBase<MovePieceCommand>
+    public class MovePieceCommandHandler : CommandHandlerBase<MovePieceCommand, int>
     {
         private readonly IMovesRepository movesRepository;
 
@@ -15,7 +15,7 @@ namespace Chess.UseCases
             this.movesRepository = movesRepository;
         }
 
-        public override void ExecuteCommand(MovePieceCommand command)
+        public override int ExecuteCommand(MovePieceCommand command)
         {
             var movesLog = GetMovesLog(command.GameId);
 
@@ -26,6 +26,8 @@ namespace Chess.UseCases
             var pieceMove = pieceMover.GetPieceMove(command.From.ToDomain(), command.To.ToDomain());
 
             movesRepository.AddMove(command.GameId, pieceMove);
+
+            return pieceMove.SequenceNumber;
         }
 
         private MovesLog GetMovesLog(string gameId)

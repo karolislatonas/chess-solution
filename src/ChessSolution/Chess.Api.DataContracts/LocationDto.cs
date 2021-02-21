@@ -1,4 +1,4 @@
-﻿namespace Chess.Messages
+﻿namespace Chess.Api.DataContracts
 {
     public class LocationDto
     {
