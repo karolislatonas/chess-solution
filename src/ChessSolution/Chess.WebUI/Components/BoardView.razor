@@ -3,13 +3,27 @@
 <div class="board">
     @for(var row = 8; row >= 1; row--)
     {
-        <div class="@(row.IsEven() ? "row-even" : "row-odd" )" >
-            @for(var column = 1; column <= 8; column++)
-            {
-                var piece = BoardViewModel.Board.GetPieceAt(new Location(column, row));
+    <div class="@(row.IsEven() ? "row-even" : "row-odd" )">
+        @for (var column = 1; column <= 8; column++)
+        {
+            var location = new Location(column, row);
+            var piece = BoardViewModel.GetPieceAt(location);
 
-                <BoardCellView Row="@row" Column="@column" Piece="@piece" />
-            }
-        </div>
+            <div class="cell"
+                 ondragover="event.preventDefault();"
+                 @ondrop="() => OnDropAsync(location)" >
+
+                @if (piece != null)
+                {
+                    <PieceView Row="@row"
+                               Column="@column"
+                               Piece="@piece"
+                               OnDragStarted="@OnPieceDragStarted"
+                               OnDragEnded="@OnPieceDragEnded" />
+                }
+
+            </div>
+        }
+    </div>
     }
 </div>

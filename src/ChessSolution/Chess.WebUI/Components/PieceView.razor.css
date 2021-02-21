@@ -1,0 +1,11 @@
+﻿[draggable=true] {
+    cursor: pointer;
+}
+
+.piece {
+    flex: 1;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

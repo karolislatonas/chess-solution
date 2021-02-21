@@ -13,6 +13,7 @@ namespace Chess.WebUI.ViewModels
     public class BoardViewModel
     {
         private readonly MovementService movementService;
+        private readonly Board board;
 
         private string gameId;
 
@@ -20,27 +21,43 @@ namespace Chess.WebUI.ViewModels
         {
             this.movementService = movementService;
 
-            Board = new Board();
+            board = new Board();
         }
-                
-        public Board Board { get; }
-
-        public async Task MovePiece(int fromColumn, int fromRow, int toColumn, int toRow)
+            
+        public IPiece GetPieceAt(Location location)
         {
-            var pieceMove = new PieceMoveDto
+            return board.GetPieceAt(location);
+        }
+
+        public IEnumerable<Location> GetAvailablePieceMoves(Location location)
+        {
+            yield break;
+        }
+
+
+        public async Task MovePieceAsync(Location from, Location to)
+        {
+            if (from == to)
+                return;
+
+            var pieceMove = new MovePieceRequestDto
             {
-                From = new LocationDto { Column = fromColumn, Row = fromRow },
-                To = new LocationDto { Column = toColumn, Row = toRow }
+                From = new LocationDto { Column = from.Column, Row = from.Row },
+                To = new LocationDto { Column = to.Column, Row = to.Row }
             };
 
-            await movementService.MovePieceAsync(gameId, pieceMove);
+            var response = await movementService.MovePieceAsync(gameId, pieceMove);
+
+            var move = response.Move.AsDomain();
+
+            board.ApplyMove(move);
         }
 
         public async Task InitialiseAsync(string initialiseGameId)
         {
             gameId = initialiseGameId;
 
-            //await InitialiseMovesAsync();
+            await InitialiseMovesAsync();
         }
 
         private async Task InitialiseMovesAsync()
@@ -49,7 +66,7 @@ namespace Chess.WebUI.ViewModels
 
             var moves = movesResponse.Moves.Select(m => m.AsDomain());
 
-            Board.ApplyMoves(moves);
+            board.ApplyMoves(moves);
         }
         
     }

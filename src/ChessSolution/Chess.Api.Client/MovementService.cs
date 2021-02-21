@@ -15,7 +15,7 @@ namespace Chess.Api.Client
         public MovementService(IHttpClientFactory httpClientFactory)
         {
             client = httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri("http://localhost:6001/api/game");
+            client.BaseAddress = new Uri("http://localhost:6001/api/game/");
         }
 
         public async Task<PieceMovesResponseDto> GetGameMovesAsync(string gameId)
@@ -34,7 +34,7 @@ namespace Chess.Api.Client
             return await response.Content.ReadFromJsonAsync<PieceMoveResponseDto>();
         }
 
-        public async Task<PieceMoveResponseDto> MovePieceAsync(string gameId, PieceMoveDto pieceMove)
+        public async Task<PieceMoveResponseDto> MovePieceAsync(string gameId, MovePieceRequestDto pieceMove)
         {
             var jsonContent = ToJsonContent(pieceMove);
 
