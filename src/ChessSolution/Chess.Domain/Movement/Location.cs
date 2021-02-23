@@ -16,6 +16,12 @@ namespace Chess.Domain.Movement
 
         public int Row { get; }
 
+        public Location AddRows(int rows) => new Location(Column, Row + rows);
+
+        public Location AddColumns(int columns) => new Location(Column + columns, Row);
+
+        public Location Add(Location location) => new Location(Column + location.Column, Row + location.Row);
+
         public bool Equals(Location other)
         {
             return this == other;

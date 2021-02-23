@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Chess.Domain.Movement.Movers;
+using System.Diagnostics;
 
 namespace Chess.Domain.Pieces
 {
@@ -8,5 +9,7 @@ namespace Chess.Domain.Pieces
         public Knight(ChessColor color) : base(color)
         {
         }
+
+        public override IMover Mover => new NullMover();
     }
 }

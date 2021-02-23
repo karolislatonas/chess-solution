@@ -1,4 +1,6 @@
-﻿namespace Chess.Domain.Pieces
+﻿using Chess.Domain.Movement.Movers;
+
+namespace Chess.Domain.Pieces
 {
     public abstract class PieceBase : IPiece
     {
@@ -8,5 +10,7 @@
         }
 
         public ChessColor Color { get; }
+
+        public abstract IMover Mover { get; }
     }
 }

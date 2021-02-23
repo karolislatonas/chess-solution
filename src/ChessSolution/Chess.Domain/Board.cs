@@ -16,6 +16,30 @@ namespace Chess.Domain
             pieces = GetInitialPieciesLocations();
         }
 
+        public bool IsWithinBoard(Location location)
+        {
+            return 1 <= location.Column && location.Column <= 8 &&
+                   1 <= location.Row && location.Row <= 8;
+        }
+
+        public bool IsPieceOfColor(Location location, ChessColor color)
+        {
+            var piece = GetPieceAt(location);
+
+            return piece?.Color == color;
+        }
+
+        public TPiece GetPieceAt<TPiece>(Location location)
+            where TPiece : IPiece
+        {
+            return (TPiece)GetPieceAt(location);
+        }
+
+        public bool ContainsPieceAt(Location location)
+        {
+            return pieces.ContainsKey(location);
+        }
+
         public IPiece GetPieceAt(Location location)
         {
             if(pieces.TryGetValue(location, out var piece))
