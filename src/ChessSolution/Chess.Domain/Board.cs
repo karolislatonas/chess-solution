@@ -26,9 +26,9 @@ namespace Chess.Domain
             return null;
         }
 
-        public void ApplyMoves(IEnumerable<PieceMove> pieceMoves)
+        public void ApplyMoves(MovesLog movesLog)
         {
-            foreach (var pieceMove in pieceMoves)
+            foreach (var pieceMove in movesLog.Moves)
                 ApplyMove(pieceMove);
         }
 
@@ -50,35 +50,35 @@ namespace Chess.Domain
 
         private static Dictionary<Location, IPiece> GetInitialPieciesLocations()
         {
-            return CreatePieciesInRow(1)
-                .Concat(CreatePawnsInRow(2))
-                .Concat(CreatePieciesInRow(8))
-                .Concat(CreatePawnsInRow(7))
+            return CreatePieciesInRow(1, ChessColor.White)
+                .Concat(CreatePawnsInRow(2, ChessColor.White))
+                .Concat(CreatePieciesInRow(8, ChessColor.Black))
+                .Concat(CreatePawnsInRow(7, ChessColor.Black))
                 .ToDictionary(x => x.location, x => x.piece);
         }
 
-        private static IEnumerable<(Location location, IPiece piece)> CreatePieciesInRow(int lineIndex)
+        private static IEnumerable<(Location location, IPiece piece)> CreatePieciesInRow(int lineIndex, ChessColor color)
         {
-            yield return (LocationAt(1, lineIndex), new Rook());
-            yield return (LocationAt(2, lineIndex), new Knight());
-            yield return (LocationAt(3, lineIndex), new Bishop());
-            yield return (LocationAt(4, lineIndex), new Queen());
-            yield return (LocationAt(5, lineIndex), new King());
-            yield return (LocationAt(6, lineIndex), new Bishop());
-            yield return (LocationAt(7, lineIndex), new Knight());
-            yield return (LocationAt(8, lineIndex), new Rook());
+            yield return (LocationAt(1, lineIndex), new Rook(color));
+            yield return (LocationAt(2, lineIndex), new Knight(color));
+            yield return (LocationAt(3, lineIndex), new Bishop(color));
+            yield return (LocationAt(4, lineIndex), new Queen(color));
+            yield return (LocationAt(5, lineIndex), new King(color));
+            yield return (LocationAt(6, lineIndex), new Bishop(color));
+            yield return (LocationAt(7, lineIndex), new Knight(color));
+            yield return (LocationAt(8, lineIndex), new Rook(color));
         }
 
-        private static IEnumerable<(Location location, IPiece piece)> CreatePawnsInRow(int lineIndex)
+        private static IEnumerable<(Location location, IPiece piece)> CreatePawnsInRow(int lineIndex, ChessColor color)
         {
-            yield return (LocationAt(1, lineIndex), new Pawn());
-            yield return (LocationAt(2, lineIndex), new Pawn());
-            yield return (LocationAt(3, lineIndex), new Pawn());
-            yield return (LocationAt(4, lineIndex), new Pawn());
-            yield return (LocationAt(5, lineIndex), new Pawn());
-            yield return (LocationAt(6, lineIndex), new Pawn());
-            yield return (LocationAt(7, lineIndex), new Pawn());
-            yield return (LocationAt(8, lineIndex), new Pawn());
+            yield return (LocationAt(1, lineIndex), new Pawn(color));
+            yield return (LocationAt(2, lineIndex), new Pawn(color));
+            yield return (LocationAt(3, lineIndex), new Pawn(color));
+            yield return (LocationAt(4, lineIndex), new Pawn(color));
+            yield return (LocationAt(5, lineIndex), new Pawn(color));
+            yield return (LocationAt(6, lineIndex), new Pawn(color));
+            yield return (LocationAt(7, lineIndex), new Pawn(color));
+            yield return (LocationAt(8, lineIndex), new Pawn(color));
         }
     }
 }

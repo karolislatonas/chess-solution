@@ -3,7 +3,10 @@
 namespace Chess.Domain.Pieces
 {
     [DebuggerDisplay("King")]
-    public class King : IPiece
+    public class King : PieceBase
     {
+        public King(ChessColor color) : base(color)
+        {
+        }
     }
 }

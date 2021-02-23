@@ -1,19 +1,26 @@
-﻿namespace Chess.Domain.Movement
+﻿using System.Collections.Generic;
+
+namespace Chess.Domain.Movement
 {
     public class PieceMover
     {
         private readonly Board board;
-        private readonly MovesLog movesLog;
 
-        public PieceMover(Board board, MovesLog movesLog)
+        public PieceMover(Board board)
         {
             this.board = board;
-            this.movesLog = movesLog;
         }
 
-        public PieceMove GetPieceMove(Location from, Location to)
+        public void EnsureIsValidMove(Location from, Location to)
         {
-            return movesLog.GetNextMove(from, to);
+            
+        }
+
+        public HashSet<Location> GetAvailableMoves(Location from)
+        {
+            var piece = board.GetPieceAt(from);
+
+            return new HashSet<Location>();
         }
     }
 }

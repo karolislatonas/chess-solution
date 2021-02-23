@@ -7,14 +7,11 @@ namespace Chess.WebUI.Components
 {
     public partial class BoardView
     {
-        private PieceView draggedPiece;
-
         [Parameter]
         public string GameId { get; set; }
 
         [Inject]
         public BoardViewModel BoardViewModel { get; set; }
-
 
         protected async override Task OnInitializedAsync()
         {
@@ -23,24 +20,18 @@ namespace Chess.WebUI.Components
 
         public void OnPieceDragStarted(PieceView piece)
         {
-            draggedPiece = piece;
+            BoardViewModel.SelectPieceAt(piece.Column, piece.Row);
+            StateHasChanged();
         }
 
         public void OnPieceDragEnded(PieceView piece)
         {
-            draggedPiece = null;
+            BoardViewModel.ClearPieceSelection();
         }
 
         public async Task OnDropAsync(Location location)
         {
-            if (draggedPiece == null)
-                return;
-
-            await BoardViewModel.MovePieceAsync(
-                new Location(draggedPiece.Column, draggedPiece.Row),
-                new Location(location.Column, location.Row));
-
-            draggedPiece = null;
+            await BoardViewModel.MoveSelectedPieceToAsync(location);
         }
     }
 }

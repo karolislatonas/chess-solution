@@ -21,9 +21,12 @@ namespace Chess.UseCases
 
             var board = CreateBoard(movesLog);
 
-            var pieceMover = new PieceMover(board, movesLog);
+            var from = command.From.ToDomain();
+            var to = command.To.ToDomain();
 
-            var pieceMove = pieceMover.GetPieceMove(command.From.ToDomain(), command.To.ToDomain());
+            EnsureIsValidMove(from, to, board);
+
+            var pieceMove = movesLog.GetNextMove(from, to);
 
             movesRepository.AddMove(command.GameId, pieceMove);
 
@@ -40,9 +43,16 @@ namespace Chess.UseCases
         private Board CreateBoard(MovesLog movesLog)
         {
             var board = new Board();
-            board.ApplyMoves(movesLog.Moves);
+            board.ApplyMoves(movesLog);
 
             return board;
+        }
+
+        private void EnsureIsValidMove(Location from, Location to, Board board)
+        {
+            var pieceMover = new PieceMover(board);
+
+            pieceMover.EnsureIsValidMove(from, to);
         }
     }
 }

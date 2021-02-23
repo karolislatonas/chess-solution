@@ -3,7 +3,7 @@
 <div class="board">
     @for(var row = 8; row >= 1; row--)
     {
-    <div class="@(row.IsEven() ? "row-even" : "row-odd" )">
+    <div class="row @(row.IsEven() ? "row-even" : "row-odd")">
         @for (var column = 1; column <= 8; column++)
         {
             var location = new Location(column, row);
@@ -20,6 +20,12 @@
                                Piece="@piece"
                                OnDragStarted="@OnPieceDragStarted"
                                OnDragEnded="@OnPieceDragEnded" />
+                }
+
+                @if (BoardViewModel.SelectedPiece != null && 
+                    BoardViewModel.SelectedPiece.CanMoveTo(location))
+                {
+                    <div class="available-move-marker"></div>
                 }
 
             </div>

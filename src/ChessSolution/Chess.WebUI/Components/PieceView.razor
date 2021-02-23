@@ -1,9 +1,10 @@
-﻿<div class="piece" draggable="true"
+﻿
+<div class="piece" draggable="true"
      @ondragstart="HandleDragStarted"
      @ondragend="HandleDragEnded">
 
-    <div>
-        @Piece.GetType().Name
-    </div>
+    <img class="piece-image" src="@GetImageUrl()" />
+
+
 
 </div>

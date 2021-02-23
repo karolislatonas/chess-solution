@@ -3,9 +3,19 @@
 }
 
 .piece {
-    flex: 1;
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
+    user-select: none;
+}
+
+.piece-image {
+    object-fit: fill;
+    max-height: 100%;
+    max-width: 100%;
 }

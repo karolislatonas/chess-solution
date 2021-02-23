@@ -2,5 +2,6 @@
 {
     public interface IPiece
     {
+        ChessColor Color { get; }
     }
 }

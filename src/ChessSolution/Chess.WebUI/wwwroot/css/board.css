@@ -1,42 +1,47 @@
-﻿.board {
+﻿:root {
+    --cell-color-even: white;
+    --cell-color-odd: green;
+}
+
+.board {
     display: flex;
     flex-direction: column;
     border: 1px solid black;
 }
 
-.row-even {
+.row {
     display: flex;
     flex-direction: row;
+    user-select: none;
 }
 
-    .row-even > div {
+    .row > div {
         width: 64px;
         height: 64px;
+        user-select: none;
     }
 
+.row-even {
+    
+}
 
-        .row-even > div:nth-child(odd) {
-            background: white;
-        }
+    .row-even > div:nth-child(odd) {
+        background: var(--cell-color-even);
+    }
 
-        .row-even > div:nth-child(even) {
-            background: green;
-        }
+    .row-even > div:nth-child(even) {
+        background: var(--cell-color-odd);
+    }
 
 .row-odd {
-    display: flex;
-    flex-direction: row;
+    
 }
-
-    .row-odd > div {
-        width: 64px;
-        height: 64px;
+    .row-odd > div:nth-child(odd) {
+        background: var(--cell-color-odd);
     }
 
-        .row-odd > div:nth-child(odd) {
-            background: green;
-        }
+    .row-odd > div:nth-child(even) {
+        background: var(--cell-color-even);
+    }
 
-        .row-odd > div:nth-child(even) {
-            background: white;
-        }
+
