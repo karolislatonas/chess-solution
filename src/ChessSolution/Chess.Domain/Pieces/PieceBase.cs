@@ -1,4 +1,6 @@
-﻿using Chess.Domain.Movement.Movers;
+﻿using Chess.Domain.Movement;
+using Chess.Domain.Movement.Movers;
+using System.Collections.Generic;
 
 namespace Chess.Domain.Pieces
 {
@@ -12,5 +14,9 @@ namespace Chess.Domain.Pieces
         public ChessColor Color { get; }
 
         public abstract IMover Mover { get; }
+
+        public abstract IReadOnlyList<Location> MoveDirections { get; }
+
+        public abstract IReadOnlyList<Location> TakeDirections { get; }
     }
 }

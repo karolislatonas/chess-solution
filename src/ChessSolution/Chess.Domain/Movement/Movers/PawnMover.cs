@@ -20,21 +20,18 @@ namespace Chess.Domain.Movement.Movers
 
         private static IEnumerable<Location> GetPossibleMoveDirections(Pawn pawn, Location from)
         {
-            yield return new Location(0, pawn.RowMoveDirection);
+            var moveDirections = pawn.MoveDirections.AsEnumerable();
 
             if (from.Row == pawn.StartingRow)
-                yield return new Location(0, 2 * pawn.RowMoveDirection);
+                moveDirections = moveDirections.Append(new Location(0, 2 * pawn.RowMoveDirection));
+
+            return moveDirections;
         }
 
         private static IEnumerable<Location> GetAvailableTakes(Pawn pawn, Board board, Location from)
         {
-            var possibleTakeDirections = new[]
-            {
-                new Location(-1, pawn.RowMoveDirection),
-                new Location(1, pawn.RowMoveDirection),
-            };
-
-            return possibleTakeDirections
+            return pawn
+                .TakeDirections
                 .Select(d => from.Add(d))
                 .Where(l => board.IsPieceOfColor(l, pawn.Color.GetOpposite()));
         }

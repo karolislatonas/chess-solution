@@ -3,24 +3,27 @@ using System.Linq;
 
 namespace Chess.Domain.Movement.Movers
 {
-    public abstract class DirectionalMover : PieceMoverBase
+    public class DirectionalMover : PieceMoverBase
     {
         public override IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
         {
-            return GetPossibleMoveDirections()
+            var possibleMoveDirections = board.GetPieceAt(from).MoveDirections;
+
+            return possibleMoveDirections
                 .SelectMany(d => GetAvailablesMovesInDirection(board, from, d))
                 .Where(board.IsWithinBoard);
         }
 
         private static IEnumerable<Location> GetAvailablesMovesInDirection(Board board, Location from, Location direction)
         {
-            var bishop = board.GetPieceAt(from);
+            var piece = board.GetPieceAt(from);
+
             var location = from.Add(direction);
 
             var isBlockedByOtherPiece = false;
 
             while (board.IsWithinBoard(location) &&
-                   !board.IsPieceOfColor(location, bishop.Color) &&
+                   !board.IsPieceOfColor(location, piece.Color) &&
                    !isBlockedByOtherPiece)
             {
                 yield return location;
@@ -29,7 +32,5 @@ namespace Chess.Domain.Movement.Movers
                 location = location.Add(direction);
             }
         }
-
-        protected abstract IEnumerable<Location> GetPossibleMoveDirections();
     }
 }
