@@ -1,4 +1,5 @@
-﻿using Chess.Domain.Pieces;
+﻿using Chess.Domain.Extensions;
+using Chess.Domain.Pieces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,22 +11,19 @@ namespace Chess.Domain.Movement.Movers
         {
             var pawn = board.GetPieceAt<Pawn>(from);
 
-            return GetAvailableMoves(pawn, board, from)
+            return GetPossibleMoveDirections(pawn, from)
+                .Select(d => from.Add(d))
+                .TakeWhile(l => !board.ContainsPieceAt(l))
+
                 .Concat(GetAvailableTakes(pawn, board, from));
         }
 
-        private static IEnumerable<Location> GetAvailableMoves(Pawn pawn, Board board, Location from)
+        private static IEnumerable<Location> GetPossibleMoveDirections(Pawn pawn, Location from)
         {
-            var availableMoves = new List<Location>(2);
-
-            availableMoves.Add(from.AddRows(pawn.RowMoveDirection));
+            yield return new Location(0, pawn.RowMoveDirection);
 
             if (from.Row == pawn.StartingRow)
-                availableMoves.Add(from.AddRows(2 * pawn.RowMoveDirection));
-
-            return availableMoves
-                .Where(l => !board.ContainsPieceAt(l))
-                .Where(board.IsWithinBoard);
+                yield return new Location(0, 2 * pawn.RowMoveDirection);
         }
 
         private static IEnumerable<Location> GetAvailableTakes(Pawn pawn, Board board, Location from)
@@ -38,14 +36,7 @@ namespace Chess.Domain.Movement.Movers
 
             return possibleTakeDirections
                 .Select(d => from.Add(d))
-                .Where(board.IsWithinBoard)
-                .Where(board.ContainsPieceAt)
-                .Where(l => AreOppositeColors(pawn, board.GetPieceAt(l)));
-        }
-
-        private static bool AreOppositeColors(IPiece piece, IPiece other)
-        {
-            return piece.Color != other.Color;
+                .Where(l => board.IsPieceOfColor(l, pawn.Color.GetOpposite()));
         }
     }
 }
