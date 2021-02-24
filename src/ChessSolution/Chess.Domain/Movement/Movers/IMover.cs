@@ -6,6 +6,6 @@ namespace Chess.Domain.Movement.Movers
     {
         bool CanMoveTo(Board board, Location from, Location to);
 
-        IEnumerable<Location> GetAvaialbleMovesFrom(Board board, Location from);
+        IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from);
     }
 }

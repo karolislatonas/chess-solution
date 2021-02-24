@@ -6,7 +6,7 @@ namespace Chess.Domain.Movement.Movers
 {
     public class PawnMover : PieceMoverBase
     {
-        public override IEnumerable<Location> GetAvaialbleMovesFrom(Board board, Location from)
+        public override IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
         {
             var pawn = board.GetPieceAt<Pawn>(from);
 

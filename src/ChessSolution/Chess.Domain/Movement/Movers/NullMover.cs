@@ -5,7 +5,7 @@ namespace Chess.Domain.Movement.Movers
 {
     public class NullMover : IMover
     {
-        public IEnumerable<Location> GetAvaialbleMovesFrom(Board board, Location location)
+        public IEnumerable<Location> GetAvailableMovesFrom(Board board, Location location)
         {
             yield break;
         }

@@ -10,6 +10,6 @@ namespace Chess.Domain.Pieces
         {
         }
 
-        public override IMover Mover => new NullMover();
+        public override IMover Mover => new KnightMover();
     }
 }

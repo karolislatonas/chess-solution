@@ -5,7 +5,7 @@ namespace Chess.Domain.Movement.Movers
 {
     public abstract class DirectionalMover : PieceMoverBase
     {
-        public override IEnumerable<Location> GetAvaialbleMovesFrom(Board board, Location from)
+        public override IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
         {
             return GetPossibleMoveDirections()
                 .SelectMany(d => GetAvailablesMovesInDirection(board, from, d))

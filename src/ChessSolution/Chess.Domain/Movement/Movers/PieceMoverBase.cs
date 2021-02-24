@@ -8,9 +8,9 @@ namespace Chess.Domain.Movement.Movers
     {
         public bool CanMoveTo(Board board, Location from, Location to)
         {
-            return GetAvaialbleMovesFrom(board, from).Any(l => l == to);
+            return GetAvailableMovesFrom(board, from).Any(l => l == to);
         }
 
-        public abstract IEnumerable<Location> GetAvaialbleMovesFrom(Board board, Location from);
+        public abstract IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from);
     }
 }

@@ -29,7 +29,7 @@ namespace Chess.Domain.Movement
         {
             var mover = GetPieceMover(from);
 
-            return new HashSet<Location>(mover.GetAvaialbleMovesFrom(board, from));
+            return new HashSet<Location>(mover.GetAvailableMovesFrom(board, from));
         }
 
         private IMover GetPieceMover(Location from)
