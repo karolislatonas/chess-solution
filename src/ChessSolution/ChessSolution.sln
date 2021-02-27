@@ -19,7 +19,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Api.DataContracts", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.WebUI", "Chess.WebUI\Chess.WebUI.csproj", "{5F0AF21A-0D6F-4924-A2B2-1A3102520D67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Api.Client", "Chess.Api.Client\Chess.Api.Client.csproj", "{1D6CDF02-A56D-4CD8-9CD9-6DBE249CA793}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Api.Client", "Chess.Api.Client\Chess.Api.Client.csproj", "{1D6CDF02-A56D-4CD8-9CD9-6DBE249CA793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Shared", "Chess.Shared\Chess.Shared.csproj", "{183CD284-544B-43CB-AADC-61EBBEEBE572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{1D6CDF02-A56D-4CD8-9CD9-6DBE249CA793}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D6CDF02-A56D-4CD8-9CD9-6DBE249CA793}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D6CDF02-A56D-4CD8-9CD9-6DBE249CA793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{183CD284-544B-43CB-AADC-61EBBEEBE572}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{183CD284-544B-43CB-AADC-61EBBEEBE572}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{183CD284-544B-43CB-AADC-61EBBEEBE572}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{183CD284-544B-43CB-AADC-61EBBEEBE572}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

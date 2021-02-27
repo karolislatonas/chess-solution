@@ -52,7 +52,12 @@ namespace Chess.Domain
 
         public void ApplyMoves(MovesLog movesLog)
         {
-            foreach (var pieceMove in movesLog.Moves)
+            ApplyMoves(movesLog);
+        }
+
+        public void ApplyMoves(IEnumerable<PieceMove> moves)
+        {
+            foreach (var pieceMove in moves)
                 ApplyMove(pieceMove);
         }
 

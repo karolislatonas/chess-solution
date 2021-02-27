@@ -26,11 +26,12 @@ namespace Chess.UseCases
 
             EnsureIsValidMove(from, to, board);
 
-            var pieceMove = movesLog.GetNextMove(from, to);
+            movesLog.AddMove(from, to);
+            var latestMove = movesLog.LatestMove;
 
-            movesRepository.AddMove(command.GameId, pieceMove);
+            movesRepository.AddMove(command.GameId, latestMove);
 
-            return pieceMove.SequenceNumber;
+            return latestMove.SequenceNumber;
         }
 
         private MovesLog GetMovesLog(string gameId)

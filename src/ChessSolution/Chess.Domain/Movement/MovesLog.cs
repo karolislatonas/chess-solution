@@ -1,15 +1,17 @@
-﻿using System;
+﻿using Chess.Shared.Collections;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Chess.Domain.Movement
 {
-    public class MovesLog
+    public class MovesLog : IEnumerable<PieceMove>
     {
         private const int SequenceNumberStart = 0;
         private const int SequenceNumberIncrement = 1;
 
-        private readonly List<PieceMove> moves;
+        private readonly IndexedLinkedList<int, PieceMove> moves;
 
         public MovesLog() :
             this(Enumerable.Empty<PieceMove>())
@@ -17,25 +19,54 @@ namespace Chess.Domain.Movement
             
         }
 
-        public PieceMove LatestMove => moves.LastOrDefault();
-
         public MovesLog(IEnumerable<PieceMove> pieceMoves)
         {
-            moves = new List<PieceMove>(pieceMoves);
+            moves = new IndexedLinkedList<int, PieceMove>(p => p.SequenceNumber, pieceMoves);
 
             EnsureSequenceWithoutGaps();
         }
 
-        public void AddMove(Location from, Location to)
+        public PieceMove LatestMove => moves.LastOrDefault();
+
+        public void AddMove(PieceMove pieceMove)
         {
-            moves.Add(GetNextMove(from, to));
+            if (NextMoveSequenceNumber() != pieceMove.SequenceNumber)
+                throw new Exception();
+
+            moves.Add(pieceMove);
         }
 
-        public PieceMove GetNextMove(Location from, Location to)
+        public void AddMove(Location from, Location to)
         {
-            var nextMoveSequenceNumber = GetLatestMoveSequenceNumber() + SequenceNumberIncrement;
+            moves.Add(CreateNextMove(from, to));
+        }
 
-            return new PieceMove(nextMoveSequenceNumber, from, to);
+        public IEnumerable<PieceMove> GetMovesFromTo(int fromSequenceNumber, int toSequenceNumber)
+        {
+            for(var i = fromSequenceNumber; i <= toSequenceNumber; i++)
+            {
+                yield return moves.GetValue(i);
+            }
+        }
+
+        public IEnumerator<PieceMove> GetEnumerator()
+        {
+            return moves.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private PieceMove CreateNextMove(Location from, Location to)
+        {
+            return new PieceMove(NextMoveSequenceNumber(), from, to);
+        }
+
+        private int NextMoveSequenceNumber()
+        {
+            return GetLatestMoveSequenceNumber() + SequenceNumberIncrement;
         }
 
         private int GetLatestMoveSequenceNumber()
@@ -44,10 +75,8 @@ namespace Chess.Domain.Movement
             if (isLogEmpty)
                 return SequenceNumberIncrement;
 
-            return moves[moves.Count - 1].SequenceNumber;
+            return moves.Last.SequenceNumber;
         }
-
-        public IReadOnlyList<PieceMove> Moves => moves;
 
         private void EnsureSequenceWithoutGaps()
         {
@@ -67,5 +96,7 @@ namespace Chess.Domain.Movement
                 throwAction();
 
         }
+
+      
     }
 }
