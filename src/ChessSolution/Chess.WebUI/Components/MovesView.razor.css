@@ -1,0 +1,30 @@
+﻿
+
+.moves-navigator {
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    width: 290px;
+}
+
+.moves-container {
+    display:flex;
+    flex-flow:row wrap;
+    padding: 5px;
+}
+
+.navigator-control-container {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+}
+
+.navigator-control-container > button {
+    width:100%;
+}
+
+
+
+

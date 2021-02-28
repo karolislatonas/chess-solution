@@ -2,12 +2,9 @@
 {
     public class MovesReplayer
     {
-        private readonly MovesLog movesLog;
-        private int currentMoveNumber;
-
         public MovesReplayer(MovesLog movesLog, int moveNumber = 0)
         {   
-            this.movesLog = movesLog;
+            MovesLog = movesLog;
 
             Reset();
 
@@ -15,6 +12,24 @@
         }
 
         public Board Board { get; private set; }
+
+        public MovesLog MovesLog { get; }
+
+        public bool IsAtLastMove => (MovesLog.LatestMove?.SequenceNumber ?? 0) == CurrentMoveNumber;
+
+        public int CurrentMoveNumber { get; private set; }
+
+        public void AddMove(PieceMove pieceMove)
+        {
+            MovesLog.AddMove(pieceMove);
+            ToLastMove();
+        }
+
+        public void AddMove(Location from, Location to)
+        {
+            MovesLog.AddMove(from, to);
+            ToLastMove();
+        }
 
         public void ToPreviousMove()
         {
@@ -26,41 +41,48 @@
             ToMove(NextMoveNumber());
         }
 
+        public void ToStart()
+        {
+            ToMove(0);
+        }
+
         public void ToLastMove()
         {
-            var lastMoveNumber = movesLog.LatestMove.SequenceNumber;
-            ToMove(lastMoveNumber);
+            var lastMove = MovesLog.LatestMove;
+
+            if(lastMove != null)
+                ToMove(lastMove.SequenceNumber);
         }
 
         public void ToMove(int sequenceNumber)
         {
-            if (sequenceNumber > currentMoveNumber)
+            if (sequenceNumber > CurrentMoveNumber)
                 ApplyMoves(NextMoveNumber(), sequenceNumber);
 
-            if (sequenceNumber < currentMoveNumber)
+            if (sequenceNumber < CurrentMoveNumber)
             {
                 Reset();
-                ApplyMoves(currentMoveNumber, sequenceNumber);
+                ApplyMoves(1, sequenceNumber);
             }
         }
 
-        private int PreviousMoveNumber() => currentMoveNumber - 1;
+        private int PreviousMoveNumber() => CurrentMoveNumber - 1;
 
-        private int NextMoveNumber() => currentMoveNumber + 1;
+        private int NextMoveNumber() => CurrentMoveNumber + 1;
 
         public void Reset()
         {
-            currentMoveNumber = 0;
+            CurrentMoveNumber = 0;
             Board = new Board();
         }
 
         private void ApplyMoves(int fromSequenceNumber, int toSequenceNumber)
         {
-            var moves = movesLog.GetMovesFromTo(fromSequenceNumber, toSequenceNumber);
+            var moves = MovesLog.GetMovesFromTo(fromSequenceNumber, toSequenceNumber);
 
             foreach(var move in moves)
             {
-                currentMoveNumber = move.SequenceNumber;
+                CurrentMoveNumber = move.SequenceNumber;
                 Board.ApplyMove(move);
             }
         }

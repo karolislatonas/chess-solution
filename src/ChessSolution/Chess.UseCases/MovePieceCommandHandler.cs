@@ -24,7 +24,7 @@ namespace Chess.UseCases
             var from = command.From.ToDomain();
             var to = command.To.ToDomain();
 
-            EnsureIsValidMove(from, to, board);
+            EnsureIsValidMove(board, from, to);
 
             movesLog.AddMove(from, to);
             var latestMove = movesLog.LatestMove;
@@ -49,11 +49,11 @@ namespace Chess.UseCases
             return board;
         }
 
-        private void EnsureIsValidMove(Location from, Location to, Board board)
+        private void EnsureIsValidMove(Board board, Location from, Location to)
         {
-            var pieceMover = new PieceMover(board);
+            var pieceMover = new PieceMover();
 
-            pieceMover.EnsureIsValidMove(from, to);
+            pieceMover.EnsureIsValidMove(board, from, to);
         }
     }
 }

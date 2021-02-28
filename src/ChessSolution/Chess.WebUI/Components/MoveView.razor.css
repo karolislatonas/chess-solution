@@ -1,0 +1,13 @@
+﻿.move-container {
+    padding: 2px 4px 2px 4px;
+    border-radius: 2px;
+}
+
+.move-container-selected {
+    background-color: lightgray;
+}
+
+.move-container:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}

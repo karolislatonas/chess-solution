@@ -1,35 +1,35 @@
 ﻿@using Domain.Movement;
 
 <div class="board">
-    @for(var row = 8; row >= 1; row--)
+    @for (var row = 8; row >= 1; row--)
     {
-    <div class="row @(row.IsEven() ? "row-even" : "row-odd")">
-        @for (var column = 1; column <= 8; column++)
-        {
-            var location = new Location(column, row);
-            var piece = BoardViewModel.GetPieceAt(location);
+        <div class="row @(row.IsEven() ? "row-even" : "row-odd")">
+            @for (var column = 1; column <= 8; column++)
+            {
+                var location = new Location(column, row);
+                var piece = BoardViewModel.GetPieceAt(location);
 
-            <div class="cell"
-                 ondragover="event.preventDefault();"
-                 @ondrop="() => OnDropAsync(location)" >
+                <div class="cell"
+                     ondragover="event.preventDefault();"
+                     @ondrop="() => OnDropAsync(location)">
 
-                @if (piece != null)
-                {
-                    <PieceView Row="@row"
-                               Column="@column"
-                               Piece="@piece"
-                               OnDragStarted="@OnPieceDragStarted"
-                               OnDragEnded="@OnPieceDragEnded" />
-                }
+                    @if (piece != null)
+                    {
+                        <PieceView Row="@row"
+                                   Column="@column"
+                                   Piece="@piece"
+                                   OnDragStarted="@OnPieceDragStarted"
+                                   OnDragEnded="@OnPieceDragEnded" />
+                    }
 
-                @if (BoardViewModel.SelectedPiece != null && 
-                    BoardViewModel.SelectedPiece.CanMoveTo(location))
-                {
-                    <div class="available-move-marker"></div>
-                }
+                    @if (BoardViewModel.SelectedPiece != null &&
+                      BoardViewModel.SelectedPiece.CanMoveTo(location))
+                    {
+                        <div class="available-move-marker"></div>
+                    }
 
-            </div>
-        }
-    </div>
+                </div>
+            }
+        </div>
     }
 </div>

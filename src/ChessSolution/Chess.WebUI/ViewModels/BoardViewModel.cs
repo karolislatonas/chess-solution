@@ -1,6 +1,5 @@
 ﻿using Chess.Api.Client;
 using Chess.Api.DataContracts;
-using Chess.Domain;
 using Chess.Domain.Movement;
 using Chess.Domain.Pieces;
 using Chess.WebUI.Translations;
@@ -12,10 +11,9 @@ namespace Chess.WebUI.ViewModels
 {
     public class BoardViewModel
     {
-        private readonly MovementService movementService;
-        private readonly Board board;
         private readonly PieceMover pieceMover;
-        private MovesLog movesLog;
+        private readonly MovementService movementService;
+        private readonly MovesReplayer movesReplayer;
 
         private string gameId;
 
@@ -23,22 +21,25 @@ namespace Chess.WebUI.ViewModels
         {
             this.movementService = movementService;
 
-            board = new Board();
-            pieceMover = new PieceMover(board);
+            pieceMover = new PieceMover();
+            movesReplayer = new MovesReplayer(new MovesLog());
         }
 
         public PieceSelection SelectedPiece { get; private set; }
 
-        public PieceMove LatestMove => movesLog.LatestMove;
+        public int CurrentMoveNumber => movesReplayer.CurrentMoveNumber;
 
-        public IPiece GetPieceAt(Location location) => board.GetPieceAt(location);
+        public IEnumerable<PieceMove> Moves => movesReplayer.MovesLog;
+
+        public IPiece GetPieceAt(Location location) => movesReplayer.Board.GetPieceAt(location);
 
         public void SelectPieceAt(int column, int row)
         {
             var from = new Location(column, row);
+            var board = movesReplayer.Board;
             var piece = board.GetPieceAt(from);
 
-            var availableMoves = pieceMover.GetAvailableMoves(from);
+            var availableMoves = pieceMover.GetAvailableMoves(board, from);
 
             SelectedPiece = new PieceSelection(from, piece, availableMoves);
         }
@@ -47,6 +48,16 @@ namespace Chess.WebUI.ViewModels
         {
             SelectedPiece = null;
         }
+
+        public void NextMove() => movesReplayer.ToNextMove();
+
+        public void PreviousMove() => movesReplayer.ToPreviousMove();
+
+        public void ToMove(int moveNumber) => movesReplayer.ToMove(moveNumber);
+
+        public void ToLastMove() => movesReplayer.ToLastMove();
+
+        public void ToStart() => movesReplayer.ToStart();
 
         public async Task MoveSelectedPieceToAsync(Location to)
         {
@@ -59,17 +70,20 @@ namespace Chess.WebUI.ViewModels
             if (!selectedPiece.CanMoveTo(to))
                 return;
 
-            await MovePieceAsync(selectedPiece.From, to);
+            if (!movesReplayer.IsAtLastMove)
+            {
+                movesReplayer.ToLastMove();
+                return;
+            }
+
+            
+
+            //await PushMoveAsync(selectedPiece.From, to);
+
+            movesReplayer.AddMove(selectedPiece.From, to);
         }
 
-        public async Task MovePieceAsync(Location from, Location to)
-        {
-            movesLog.AddMove(from, to);
-
-            board.ApplyMove(movesLog.LatestMove);
-        }
-
-        public async Task MovePieceAsyncB(Location from, Location to)
+        public async Task PushMoveAsync(Location from, Location to)
         {
             var pieceMove = new MovePieceRequestDto
             {
@@ -77,29 +91,24 @@ namespace Chess.WebUI.ViewModels
                 To = new LocationDto { Column = to.Column, Row = to.Row }
             };
 
-            var response = await movementService.MovePieceAsync(gameId, pieceMove);
-
-            var move = response.Move.AsDomain();
-
-            movesLog.AddMove(move.From, move.To);
-            board.ApplyMove(move);
+            await movementService.MovePieceAsync(gameId, pieceMove);
         }
 
         public async Task InitialiseAsync(string initialiseGameId)
         {
             gameId = initialiseGameId;
 
-            await InitialiseMovesAsync();
+            //await InitialiseMovesAsync();
         }
 
         private async Task InitialiseMovesAsync()
         {
-            //var movesResponse = await movementService.GetGameMovesAsync(gameId);
+            var movesResponse = await movementService.GetGameMovesAsync(gameId);
 
-            //movesLog = new MovesLog(movesResponse.Moves.Select(m => m.AsDomain()));
-            movesLog = new MovesLog();
+            var moves = movesResponse.Moves.Select(m => m.AsDomain());
 
-            board.ApplyMoves(movesLog);
+            foreach (var move in moves)
+                movesReplayer.AddMove(move);
         }
         
     }

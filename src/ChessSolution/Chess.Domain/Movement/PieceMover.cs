@@ -6,16 +6,9 @@ namespace Chess.Domain.Movement
 {
     public class PieceMover
     {
-        private readonly Board board;
-
-        public PieceMover(Board board)
+        public void EnsureIsValidMove(Board board, Location from, Location to)
         {
-            this.board = board;
-        }
-
-        public void EnsureIsValidMove(Location from, Location to)
-        {
-            var mover = GetPieceMover(from);
+            var mover = GetPieceMover(board, from);
 
             var canMoveTo = mover.CanMoveTo(board, from, to);
 
@@ -25,14 +18,14 @@ namespace Chess.Domain.Movement
             }
         }
 
-        public HashSet<Location> GetAvailableMoves(Location from)
+        public HashSet<Location> GetAvailableMoves(Board board, Location from)
         {
-            var mover = GetPieceMover(from);
+            var mover = GetPieceMover(board, from);
 
             return new HashSet<Location>(mover.GetAvailableMovesFrom(board, from));
         }
 
-        private IMover GetPieceMover(Location from)
+        private IMover GetPieceMover(Board board, Location from)
         {
             var piece = board.GetPieceAt(from);
 

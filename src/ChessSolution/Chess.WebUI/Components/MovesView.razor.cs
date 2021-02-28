@@ -1,14 +1,11 @@
 ﻿using Chess.WebUI.ViewModels;
 using Microsoft.AspNetCore.Components;
 
-namespace Chess.WebUI.Pages
+namespace Chess.WebUI.Components
 {
-    public partial class GameView
+    public partial class MovesView
     {
         [Parameter]
-        public string GameId { get; set; }
-
-        [Inject]
         public BoardViewModel BoardViewModel { get; set; }
     }
 }

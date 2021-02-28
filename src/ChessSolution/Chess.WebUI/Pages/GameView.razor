@@ -2,6 +2,12 @@
 
 <h3>Game: @GameId</h3>
 
-<BoardView GameId="@GameId" />
+<div class="game-container">
+
+    <BoardView GameId="@GameId" BoardViewModel="@BoardViewModel" />
+
+    <MovesView BoardViewModel="@BoardViewModel" />
+
+</div>
 
 

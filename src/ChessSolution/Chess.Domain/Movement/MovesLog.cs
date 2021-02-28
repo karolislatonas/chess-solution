@@ -28,22 +28,25 @@ namespace Chess.Domain.Movement
 
         public PieceMove LatestMove => moves.LastOrDefault();
 
+        public void AddMove(Location from, Location to)
+        {
+            AddMove(CreateNextMove(from, to));
+        }
+
         public void AddMove(PieceMove pieceMove)
         {
-            if (NextMoveSequenceNumber() != pieceMove.SequenceNumber)
+            if (pieceMove.SequenceNumber != NextMoveSequenceNumber())
                 throw new Exception();
 
             moves.Add(pieceMove);
         }
 
-        public void AddMove(Location from, Location to)
-        {
-            moves.Add(CreateNextMove(from, to));
-        }
-
         public IEnumerable<PieceMove> GetMovesFromTo(int fromSequenceNumber, int toSequenceNumber)
         {
-            for(var i = fromSequenceNumber; i <= toSequenceNumber; i++)
+            var fromNumber = Math.Max(fromSequenceNumber, 1);
+            var toNumber = Math.Min(toSequenceNumber, LatestMove?.SequenceNumber ?? 0);
+
+            for (var i = fromNumber; i <= toNumber; i++)
             {
                 yield return moves.GetValue(i);
             }
@@ -73,7 +76,7 @@ namespace Chess.Domain.Movement
         {
             var isLogEmpty = !moves.Any();
             if (isLogEmpty)
-                return SequenceNumberIncrement;
+                return SequenceNumberStart;
 
             return moves.Last.SequenceNumber;
         }

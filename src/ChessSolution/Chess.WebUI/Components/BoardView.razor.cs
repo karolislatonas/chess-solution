@@ -10,7 +10,7 @@ namespace Chess.WebUI.Components
         [Parameter]
         public string GameId { get; set; }
 
-        [Inject]
+        [Parameter]
         public BoardViewModel BoardViewModel { get; set; }
 
         protected async override Task OnInitializedAsync()

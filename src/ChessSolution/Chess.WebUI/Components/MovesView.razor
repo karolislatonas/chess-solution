@@ -1,0 +1,23 @@
+﻿
+<div class="moves-navigator">
+    <div class="moves-container">
+
+        @foreach (var move in BoardViewModel.Moves)
+        {
+            <MoveView Move="@move"
+                      IsSelected="@(move.SequenceNumber == BoardViewModel.CurrentMoveNumber)"
+                      OnSelect="@(() => BoardViewModel.ToMove(move.SequenceNumber))" />
+        }
+
+    </div>
+
+    <div class="navigator-control-container">
+        <button @onclick="@BoardViewModel.ToStart" >|&lt;</button>
+        <button @onclick="@BoardViewModel.PreviousMove" >&lt;</button>
+        <button @onclick="@BoardViewModel.NextMove" >&gt;</button>
+        <button @onclick="@BoardViewModel.ToLastMove" >&gt;|</button>
+    </div>
+</div>
+
+
+

@@ -44,4 +44,16 @@
         background: var(--cell-color-even);
     }
 
+.game-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.game-container > div:nth-child(n+2) {
+    margin-left: 20px;
+}
+
+.moves-container > div:nth-child(n+1) {
+    margin-left: 2px;
+}
 

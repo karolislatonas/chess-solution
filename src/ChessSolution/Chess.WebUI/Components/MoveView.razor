@@ -1,0 +1,6 @@
+﻿<div class="move-container @(IsSelected ? "move-container-selected" : "")" 
+     @onclick="@(() => OnSelect?.Invoke())" >
+
+    @(Move.SequenceNumber). @BoardNotations.Value.GetCellName(Move.From)-@BoardNotations.Value.GetCellName(Move.To)
+
+</div>
