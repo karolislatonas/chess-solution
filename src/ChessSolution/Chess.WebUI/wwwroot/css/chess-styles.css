@@ -7,17 +7,21 @@
     display: flex;
     flex-direction: column;
     border: 1px solid black;
+    width: 74vmin;
+    height: 74vmin;
 }
 
 .row {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: row;
     user-select: none;
 }
 
     .row > div {
-        width: 74px;
-        height: 74px;
+        width: 100%;
+        height: 100%;
         user-select: none;
     }
 

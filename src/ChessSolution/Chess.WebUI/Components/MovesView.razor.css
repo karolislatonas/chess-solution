@@ -6,7 +6,7 @@
     display: flex;
     flex-flow: column;
     justify-content: space-between;
-    width: 290px;
+    width: 25vmin;
 }
 
 .moves-container {
@@ -15,14 +15,15 @@
     padding: 5px;
 }
 
-.navigator-control-container {
+.navigator-controls-container {
     display: flex;
     flex-flow: row;
     justify-content: space-between;
 }
 
-.navigator-control-container > button {
+.navigator-controls-container > button {
     width:100%;
+    white-space: nowrap;
 }
 
 
