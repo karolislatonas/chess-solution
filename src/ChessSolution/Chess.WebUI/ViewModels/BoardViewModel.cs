@@ -1,5 +1,6 @@
 ﻿using Chess.Api.Client;
 using Chess.Api.DataContracts;
+using Chess.Domain;
 using Chess.Domain.Movement;
 using Chess.Domain.Pieces;
 using Chess.WebUI.Translations;
@@ -15,6 +16,7 @@ namespace Chess.WebUI.ViewModels
         private readonly PieceMover pieceMover;
         private readonly MovementService movementService;
         private readonly MovesReplayer movesReplayer;
+        private readonly TurnsTracker turnsTracker;
 
         private string gameId;
 
@@ -26,6 +28,7 @@ namespace Chess.WebUI.ViewModels
 
             pieceMover = new PieceMover();
             movesReplayer = new MovesReplayer(new MovesLog());
+            turnsTracker = new TurnsTracker(movesReplayer.MovesLog);
         }
 
         public PieceSelection SelectedPiece { get; private set; }
@@ -42,8 +45,10 @@ namespace Chess.WebUI.ViewModels
             var board = movesReplayer.Board;
             var piece = board.GetPieceAt(from);
 
-            var availableMoves = pieceMover.GetAvailableMoves(board, from);
-
+            var availableMoves = turnsTracker.IsTurnFor(piece.Color) ?
+                pieceMover.GetAvailableMoves(board, from) :
+                new HashSet<Location>();
+                
             SelectedPiece = new PieceSelection(from, piece, availableMoves);
         }
 

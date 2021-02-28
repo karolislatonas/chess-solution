@@ -3,6 +3,7 @@ using Chess.Domain;
 using Chess.Domain.Movement;
 using Chess.Messages.Commands;
 using Chess.Messages.DomainTranslation;
+using System;
 
 namespace Chess.UseCases
 {
@@ -24,6 +25,7 @@ namespace Chess.UseCases
             var from = command.From.ToDomain();
             var to = command.To.ToDomain();
 
+            EnsureIsPlayerTurn(board, movesLog, from);
             EnsureIsValidMove(board, from, to);
 
             movesLog.AddMove(from, to);
@@ -32,6 +34,15 @@ namespace Chess.UseCases
             movesRepository.AddMove(command.GameId, latestMove);
 
             return latestMove.SequenceNumber;
+        }
+
+        private void EnsureIsPlayerTurn(Board board, MovesLog movesLog, Location from)
+        {
+            var playerColor = board.GetPieceAt(from).Color;
+            var turnsTracker = new TurnsTracker(movesLog);
+            
+            if(!turnsTracker.IsTurnFor(playerColor))
+                throw new Exception("Wrong player moving");
         }
 
         private MovesLog GetMovesLog(string gameId)

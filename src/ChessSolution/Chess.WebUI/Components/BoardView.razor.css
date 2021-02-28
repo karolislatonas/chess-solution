@@ -11,7 +11,25 @@
     transform: translate(-50%, -50%);
     background-color: cadetblue;
     opacity: 0.6;
-    width: 24px;
-    height: 24px;
+    width: 30%;
+    height: 30%;
     border-radius: 50%;
+}
+
+.notation {
+    padding:2px;
+    font-size: 0.95rem;
+}
+
+.notation-row {
+    position: absolute;
+    left: 0%;
+    top: 0%;
+}
+
+.notation-column {
+    position: absolute;
+    left: 100%;
+    top: 100%;
+    transform: translate(-100%, -100%);
 }

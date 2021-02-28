@@ -16,8 +16,8 @@
 }
 
     .row > div {
-        width: 64px;
-        height: 64px;
+        width: 74px;
+        height: 74px;
         user-select: none;
     }
 
@@ -27,10 +27,12 @@
 
     .row-even > div:nth-child(odd) {
         background: var(--cell-color-even);
+        color: var(--cell-color-odd);
     }
 
     .row-even > div:nth-child(even) {
         background: var(--cell-color-odd);
+        color: var(--cell-color-even);
     }
 
 .row-odd {
@@ -38,10 +40,12 @@
 }
     .row-odd > div:nth-child(odd) {
         background: var(--cell-color-odd);
+        color: var(--cell-color-even);
     }
 
     .row-odd > div:nth-child(even) {
         background: var(--cell-color-even);
+        color: var(--cell-color-odd);
     }
 
 .game-container {
@@ -56,4 +60,6 @@
 .moves-container > div:nth-child(n+1) {
     margin-left: 2px;
 }
+
+
 

@@ -14,7 +14,7 @@ namespace Chess.Domain.Movement
 
             if (!canMoveTo)
             {
-                throw new Exception();
+                throw new Exception("Invalid move");
             }
         }
 
