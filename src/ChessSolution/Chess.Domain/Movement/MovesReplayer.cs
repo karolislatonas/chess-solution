@@ -19,6 +19,13 @@
 
         public int CurrentMoveNumber { get; private set; }
 
+        public PieceMove GetCurrentMove()
+        {
+            MovesLog.TryGetMove(CurrentMoveNumber, out var currentMove);
+
+            return currentMove;
+        }
+
         public void AddMove(PieceMove pieceMove)
         {
             MovesLog.AddMove(pieceMove);

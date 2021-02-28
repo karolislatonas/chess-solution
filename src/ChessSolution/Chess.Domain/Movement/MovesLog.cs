@@ -41,6 +41,11 @@ namespace Chess.Domain.Movement
             moves.Add(pieceMove);
         }
 
+        public bool TryGetMove(int sequenceNumber, out PieceMove pieceMove)
+        {
+            return moves.TryGetValue(sequenceNumber, out pieceMove);
+        }
+
         public IEnumerable<PieceMove> GetMovesFromTo(int fromSequenceNumber, int toSequenceNumber)
         {
             var fromNumber = Math.Max(fromSequenceNumber, 1);

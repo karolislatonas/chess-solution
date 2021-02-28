@@ -13,6 +13,11 @@
                      ondragover="event.preventDefault();"
                      @ondrop="() => OnDropAsync(location)">
 
+                    @if(BoardViewModel.BelongsToCurrentMove(location))
+                    {
+                        <div class="cell-current-move"></div>
+                    }
+
                     @if (piece != null)
                     {
                         <PieceView Row="@row"

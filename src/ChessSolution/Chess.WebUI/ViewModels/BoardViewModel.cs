@@ -87,6 +87,17 @@ namespace Chess.WebUI.ViewModels
             NotifyStateChanged();
         }
 
+        public bool BelongsToCurrentMove(Location location)
+        {
+            var current = movesReplayer.GetCurrentMove();
+
+            if (current == null)
+                return false;
+
+            return location == current.To ||
+                location == current.From;
+        }
+
         public async Task MoveSelectedPieceToAsync(Location to)
         {
             var selectedPiece = SelectedPiece;
