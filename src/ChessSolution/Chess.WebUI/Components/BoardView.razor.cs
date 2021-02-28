@@ -1,11 +1,12 @@
 ﻿using Chess.Domain.Movement;
 using Chess.WebUI.ViewModels;
 using Microsoft.AspNetCore.Components;
+using System;
 using System.Threading.Tasks;
 
 namespace Chess.WebUI.Components
 {
-    public partial class BoardView
+    public partial class BoardView : IDisposable
     {
         [Parameter]
         public string GameId { get; set; }
@@ -32,6 +33,16 @@ namespace Chess.WebUI.Components
         public async Task OnDropAsync(Location location)
         {
             await BoardViewModel.MoveSelectedPieceToAsync(location);
+        }
+
+        protected override void OnInitialized()
+        {
+            BoardViewModel.OnStateChanged += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            BoardViewModel.OnStateChanged -= StateHasChanged;
         }
     }
 }

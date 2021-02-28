@@ -7,5 +7,15 @@ namespace Chess.WebUI.Components
     {
         [Parameter]
         public BoardViewModel BoardViewModel { get; set; }
+
+        protected override void OnInitialized()
+        {
+            BoardViewModel.OnStateChanged += StateHasChanged;
+        }
+
+        public void Dispose()
+        {
+            BoardViewModel.OnStateChanged -= StateHasChanged;
+        }
     }
 }
