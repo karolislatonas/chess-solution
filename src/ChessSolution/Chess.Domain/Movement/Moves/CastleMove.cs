@@ -15,7 +15,7 @@ namespace Chess.Domain.Movement.Moves
             var rookMoveDirection = Math.Sign((From - To).Column);
             var rookFromColumn = rookMoveDirection < 0 ? 8 : 1;
 
-            var rookFrom = new Location(From.Row, rookFromColumn);
+            var rookFrom = new Location(rookFromColumn, From.Row);
             var rookTo = To.AddColumns(rookMoveDirection);
 
             board.MovePieceFromTo(From, To);

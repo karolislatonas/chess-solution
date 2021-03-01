@@ -36,6 +36,12 @@ namespace Chess.Domain
             return (TPiece)GetPieceAt(location);
         }
 
+        public bool IsPieceOfTypeAt<TPiece>(Location location)
+            where TPiece : IPiece
+        {
+            return GetPieceAt(location) is TPiece;
+        }
+
         public bool ContainsPieceAt(Location location)
         {
             return pieces.ContainsKey(location);

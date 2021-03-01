@@ -2,6 +2,7 @@
 using Chess.Domain.Movement.Moves;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Chess.Domain.Movement
 {
@@ -11,7 +12,7 @@ namespace Chess.Domain.Movement
         {
             var mover = GetPieceMover(board, from);
 
-            var canMoveTo = mover.CanMoveTo(board, from, to);
+            var canMoveTo = mover.GetAvailableMovesFrom(board, from).Any(l => l == to);
 
             if (!canMoveTo)
             {

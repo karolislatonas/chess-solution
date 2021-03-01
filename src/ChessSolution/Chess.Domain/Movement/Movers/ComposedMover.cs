@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Chess.Domain.Movement.Moves;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Chess.Domain.Movement.Movers
 {
-    public class ComposedMover : PieceMoverBase
+    public class ComposedMover : IMover
     {
         private readonly IMover[] movers;
 
@@ -12,7 +13,14 @@ namespace Chess.Domain.Movement.Movers
             this.movers = movers;
         }
 
-        public override IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
+        public IMove CreateMove(Board board, Location from, Location to)
+        {
+            var mover = movers.First(m => m.GetAvailableMovesFrom(board, from).Any(l => l == to));
+
+            return mover.CreateMove(board, from, to);
+        }
+
+        public IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
         {
             return movers
                 .SelectMany(m => m.GetAvailableMovesFrom(board, from))
