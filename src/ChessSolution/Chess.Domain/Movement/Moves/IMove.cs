@@ -2,6 +2,10 @@
 {
     public interface IMove
     {
+        Location From { get; }
+
+        Location To { get; }
+
         void ApplyChanges(Board board);
     }
 }

@@ -10,8 +10,8 @@
 
         public override void ApplyChanges(Board board)
         {
-            board.RemovePieceFrom(to);
-            board.MovePieceFromTo(from, to);
+            board.RemovePieceFrom(To);
+            board.MovePieceFromTo(From, To);
         }
     }
 }

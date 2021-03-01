@@ -14,8 +14,8 @@ namespace Chess.Domain.Movement.Moves
 
         public override void ApplyChanges(Board board)
         {
-            board.RemovePieceFrom(from);
-            board.AddPieceAt(promoteToPiece, to);
+            board.RemovePieceFrom(From);
+            board.AddPieceAt(promoteToPiece, To);
         }
     }
 }

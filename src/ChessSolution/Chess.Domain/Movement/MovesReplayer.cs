@@ -1,4 +1,6 @@
-﻿namespace Chess.Domain.Movement
+﻿using Chess.Domain.Movement.Moves;
+
+namespace Chess.Domain.Movement
 {
     public class MovesReplayer
     {
@@ -15,26 +17,21 @@
 
         public MovesLog MovesLog { get; }
 
-        public bool IsAtLastMove => (MovesLog.LatestMove?.SequenceNumber ?? 0) == CurrentMoveNumber;
+        public bool IsAtLastMove => (MovesLog.LastMove?.SequenceNumber ?? 0) == CurrentMoveNumber;
 
         public int CurrentMoveNumber { get; private set; }
 
-        public PieceMove GetCurrentMove()
+        public IMove GetCurrentMove()
         {
-            MovesLog.TryGetMove(CurrentMoveNumber, out var currentMove);
+            if (MovesLog.TryGetMove(CurrentMoveNumber, out var moveItem))
+                return moveItem.Move;
 
-            return currentMove;
+            return null;
         }
 
-        public void AddMove(PieceMove pieceMove)
+        public void AddMove(IMove move)
         {
-            MovesLog.AddMove(pieceMove);
-            ToLastMove();
-        }
-
-        public void AddMove(Location from, Location to)
-        {
-            MovesLog.AddMove(from, to);
+            MovesLog.AddMove(move);
             ToLastMove();
         }
 
@@ -55,7 +52,7 @@
 
         public void ToLastMove()
         {
-            var lastMove = MovesLog.LatestMove;
+            var lastMove = MovesLog.LastMove;
 
             if(lastMove != null)
                 ToMove(lastMove.SequenceNumber);
@@ -85,12 +82,12 @@
 
         private void ApplyMoves(int fromSequenceNumber, int toSequenceNumber)
         {
-            var moves = MovesLog.GetMovesFromTo(fromSequenceNumber, toSequenceNumber);
+            var movesItem = MovesLog.GetMovesFromTo(fromSequenceNumber, toSequenceNumber);
 
-            foreach(var move in moves)
+            foreach(var moveItem in movesItem)
             {
-                CurrentMoveNumber = move.SequenceNumber;
-                Board.ApplyMove(move);
+                CurrentMoveNumber = moveItem.SequenceNumber;
+                Board.ApplyMove(moveItem.Move);
             }
         }
     }

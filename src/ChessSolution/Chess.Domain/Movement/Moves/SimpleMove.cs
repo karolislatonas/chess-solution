@@ -10,7 +10,7 @@
 
         public override void ApplyChanges(Board board)
         {
-            board.MovePieceFromTo(from, to);
+            board.MovePieceFromTo(From, To);
         }
     }
 }

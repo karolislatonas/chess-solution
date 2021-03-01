@@ -12,13 +12,13 @@ namespace Chess.Domain.Movement.Moves
 
         public override void ApplyChanges(Board board)
         {
-            var rookMoveDirection = Math.Sign((from - to).Column);
+            var rookMoveDirection = Math.Sign((From - To).Column);
             var rookFromColumn = rookMoveDirection < 0 ? 8 : 1;
 
-            var rookFrom = new Location(from.Row, rookFromColumn);
-            var rookTo = to.AddColumns(rookMoveDirection);
+            var rookFrom = new Location(From.Row, rookFromColumn);
+            var rookTo = To.AddColumns(rookMoveDirection);
 
-            board.MovePieceFromTo(from, to);
+            board.MovePieceFromTo(From, To);
             board.MovePieceFromTo(rookFrom, rookTo);
         }
     }

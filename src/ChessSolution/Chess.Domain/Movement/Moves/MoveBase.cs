@@ -2,14 +2,15 @@
 {
     public abstract class MoveBase : IMove
     {
-        protected readonly Location from;
-        protected readonly Location to;
-
         public MoveBase(Location from, Location to)
         {
-            this.from = from;
-            this.to = to;
+            From = from;
+            To = to;
         }
+
+        public Location From { get; }
+
+        public Location To { get; }
 
         public abstract void ApplyChanges(Board board);
     }

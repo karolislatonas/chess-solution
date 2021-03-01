@@ -18,7 +18,7 @@ namespace Chess.Domain
 
         public ChessColor GetCurrentPlayerToMove()
         {
-            var latestMove = movesLog.LatestMove;
+            var latestMove = movesLog.LastMove;
 
             if (latestMove == null)
                 return ChessColor.White;

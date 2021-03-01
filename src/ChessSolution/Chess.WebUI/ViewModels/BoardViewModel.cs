@@ -35,7 +35,7 @@ namespace Chess.WebUI.ViewModels
 
         public int CurrentMoveNumber => movesReplayer.CurrentMoveNumber;
 
-        public IEnumerable<PieceMove> Moves => movesReplayer.MovesLog;
+        public IEnumerable<PieceMove> Moves => movesReplayer.MovesLog.Select(m => new PieceMove(m.SequenceNumber, m.Move.From, m.Move.To));
 
         public IPiece GetPieceAt(Location location) => movesReplayer.Board.GetPieceAt(location);
 
@@ -117,7 +117,8 @@ namespace Chess.WebUI.ViewModels
 
             //await PushMoveAsync(selectedPiece.From, to);
 
-            movesReplayer.AddMove(selectedPiece.From, to);
+            var move = pieceMover.CreateMove(movesReplayer.Board, selectedPiece.From, to);
+            movesReplayer.AddMove(move);
 
             NotifyStateChanged();
         }
@@ -144,7 +145,12 @@ namespace Chess.WebUI.ViewModels
         {
             var movesResponse = await movementService.GetGameMovesAsync(gameId);
 
-            var moves = movesResponse.Moves.Select(m => m.AsDomain());
+            var movesSequenceTranslator = new MoveSequenceTranslator(new Board());
+
+            var moves = movesResponse
+                .Moves
+                .Select(m => m.AsDomain())
+                .Select(movesSequenceTranslator.TranslateNextMove);
 
             foreach (var move in moves)
                 movesReplayer.AddMove(move);

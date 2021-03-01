@@ -1,4 +1,5 @@
 ﻿using Chess.Domain.Movement.Movers;
+using Chess.Domain.Movement.Moves;
 using System;
 using System.Collections.Generic;
 
@@ -23,6 +24,11 @@ namespace Chess.Domain.Movement
             var mover = GetPieceMover(board, from);
 
             return new HashSet<Location>(mover.GetAvailableMovesFrom(board, from));
+        }
+
+        public IMove CreateMove(Board board, Location from, Location to)
+        {
+            return GetPieceMover(board, from).CreateMove(board, from, to);
         }
 
         private IMover GetPieceMover(Board board, Location from)

@@ -4,6 +4,7 @@ using Chess.Domain.Movement;
 using Chess.Messages.Commands;
 using Chess.Messages.DomainTranslation;
 using System;
+using System.Linq;
 
 namespace Chess.UseCases
 {
@@ -28,12 +29,17 @@ namespace Chess.UseCases
             EnsureIsPlayerTurn(board, movesLog, from);
             EnsureIsValidMove(board, from, to);
 
-            movesLog.AddMove(from, to);
-            var latestMove = movesLog.LatestMove;
+            SaveLastMove(command.GameId, movesLog);
 
-            movesRepository.AddMove(command.GameId, latestMove);
+            return movesLog.NextMoveSequenceNumber();
+        }
 
-            return latestMove.SequenceNumber;
+        private void SaveLastMove(string gameId, MovesLog movesLog)
+        {
+            var lastMove = movesLog.LastMove;
+
+            var pieceMove = new PieceMove(lastMove.SequenceNumber, lastMove.Move.From, lastMove.Move.To);
+            movesRepository.AddMove(gameId, pieceMove);
         }
 
         private void EnsureIsPlayerTurn(Board board, MovesLog movesLog, Location from)
@@ -47,7 +53,11 @@ namespace Chess.UseCases
 
         private MovesLog GetMovesLog(string gameId)
         {
-            var allMoves = movesRepository.GetGameMoves(gameId);
+            var movesSequenceTranslator = new MoveSequenceTranslator(new Board());
+
+            var allMoves = movesRepository
+                .GetGameMoves(gameId)
+                .Select(movesSequenceTranslator.TranslateNextMove);
 
             return new MovesLog(allMoves);
         }
