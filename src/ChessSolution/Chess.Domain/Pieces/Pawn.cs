@@ -20,7 +20,7 @@ namespace Chess.Domain.Pieces
 
         public int RowMoveDirection => Color.IsWhite() ? 1 : -1;
 
-        public override IMover Mover => new PawnMover();
+        public override IMover Mover => new ComposedMover(new PawnMover(), new PawnTakeMover());
 
         public override IReadOnlyList<Location> MoveDirections { get; }
 

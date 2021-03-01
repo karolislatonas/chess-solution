@@ -13,9 +13,7 @@ namespace Chess.Domain.Movement.Movers
 
             return GetPossibleMoveDirections(pawn, from)
                 .Select(d => from.Add(d))
-                .TakeWhile(l => !board.ContainsPieceAt(l))
-
-                .Concat(GetAvailableTakes(pawn, board, from));
+                .TakeWhile(l => !board.ContainsPieceAt(l));
         }
 
         private static IEnumerable<Location> GetPossibleMoveDirections(Pawn pawn, Location from)
@@ -28,12 +26,6 @@ namespace Chess.Domain.Movement.Movers
             return moveDirections;
         }
 
-        private static IEnumerable<Location> GetAvailableTakes(Pawn pawn, Board board, Location from)
-        {
-            return pawn
-                .TakeDirections
-                .Select(d => from.Add(d))
-                .Where(l => board.IsPieceOfColor(l, pawn.Color.GetOpposite()));
-        }
+      
     }
 }
