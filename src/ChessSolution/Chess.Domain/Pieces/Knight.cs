@@ -8,7 +8,7 @@ namespace Chess.Domain.Pieces
     [DebuggerDisplay("Knight")]
     public class Knight : PieceBase
     {
-        private readonly static IReadOnlyList<Location> MoveDirectionsA = new[] {
+        private readonly static IReadOnlyList<Location> PossibleMoveDirections = new[] {
            new Location(2, 1),
            new Location(2, -1),
            new Location(-2, 1),
@@ -25,8 +25,8 @@ namespace Chess.Domain.Pieces
 
         public override IMover Mover => new SingleJumpMover();
 
-        public override IReadOnlyList<Location> MoveDirections => MoveDirectionsA;
+        public override IReadOnlyList<Location> MoveDirections => PossibleMoveDirections;
                                                                   
-        public override IReadOnlyList<Location> TakeDirections => MoveDirectionsA;
+        public override IReadOnlyList<Location> TakeDirections => PossibleMoveDirections;
     }
 }

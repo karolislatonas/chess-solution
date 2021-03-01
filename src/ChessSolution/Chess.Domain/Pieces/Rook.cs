@@ -8,7 +8,7 @@ namespace Chess.Domain.Pieces
     [DebuggerDisplay("Rook")]
     public class Rook : PieceBase
     {
-        private readonly static IReadOnlyList<Location> MoveDirectionsA = new[] {
+        private readonly static IReadOnlyList<Location> PossibleMoveDirections = new[] {
             new Location(1, 0),
             new Location(0, 1),
             new Location(-1, 0),
@@ -21,8 +21,8 @@ namespace Chess.Domain.Pieces
 
         public override IMover Mover => new DirectionalMover();
 
-        public override IReadOnlyList<Location> MoveDirections => MoveDirectionsA;
+        public override IReadOnlyList<Location> MoveDirections => PossibleMoveDirections;
                                                                   
-        public override IReadOnlyList<Location> TakeDirections => MoveDirectionsA;
+        public override IReadOnlyList<Location> TakeDirections => PossibleMoveDirections;
     }
 }
