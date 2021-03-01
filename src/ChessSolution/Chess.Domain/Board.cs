@@ -1,4 +1,5 @@
 ﻿using Chess.Domain.Movement;
+using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
 using System;
 using System.Collections.Generic;
@@ -52,7 +53,7 @@ namespace Chess.Domain
 
         public void ApplyMoves(MovesLog movesLog)
         {
-            ApplyMoves(movesLog);
+            ApplyMoves(movesLog as IEnumerable<PieceMove>);
         }
 
         public void ApplyMoves(IEnumerable<PieceMove> moves)
@@ -66,15 +67,30 @@ namespace Chess.Domain
             MovePieceFromTo(pieceMove.From, pieceMove.To);
         }
 
-        private void MovePieceFromTo(Location from, Location to)
+        public void ApplyMove(IMove move)
         {
-            if(!pieces.TryGetValue(from, out var piece))
+            move.ApplyChanges(this);
+        }
+
+        public void MovePieceFromTo(Location from, Location to)
+        {
+            if (!pieces.TryGetValue(from, out var piece))
             {
                 throw new Exception();
             }
 
+            RemovePieceFrom(from);
+            AddPieceAt(piece, to);
+        }
+
+        public void AddPieceAt(IPiece piece, Location at)
+        {
+            pieces.Add(at, piece);
+        }
+
+        public void RemovePieceFrom(Location from)
+        {
             pieces.Remove(from);
-            pieces[to] = piece;
         }
 
         private static Dictionary<Location, IPiece> GetInitialPieciesLocations()

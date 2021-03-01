@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Chess.Domain
 {
-    public class BoardNotations
+    public class BoardMetadata
     {
         private readonly IReadOnlyDictionary<int, string> ColumnNames = new Dictionary<int, string>()
         {
@@ -49,6 +49,6 @@ namespace Chess.Domain
             return $"{GetColumnName(column)}{GetRowName(row)}";
         }
 
-        public static BoardNotations Value { get; } = new BoardNotations();
+        public static BoardMetadata Value { get; } = new BoardMetadata();
     }
 }

@@ -54,6 +54,18 @@ namespace Chess.Domain.Movement
             return !(location == otherLocation);
         }
 
+        public static Location operator +(Location location, Location otherLocation)
+        {
+            return location.Add(otherLocation);
+        }
+
+        public static Location operator -(Location location, Location otherLocation)
+        {
+            return new Location(
+                location.Column - otherLocation.Column, 
+                location.Row - otherLocation.Row);
+        }
+
         public static Location LocationAt(int x, int y) => new Location(x, y);
     }
 }
