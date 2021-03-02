@@ -6,7 +6,7 @@ namespace Chess.Domain.Movement.Movers
 {
     public class SingleJumpMover : IMover
     {
-        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
             var piece = board.GetPieceAt(from);
 

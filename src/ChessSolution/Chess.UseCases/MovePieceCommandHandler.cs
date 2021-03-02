@@ -27,7 +27,7 @@ namespace Chess.UseCases
             var to = command.To.ToDomain();
 
             EnsureIsPlayerTurn(board, movesLog, from);
-            EnsureIsValidMove(board, from, to);
+            EnsureIsValidMove(board, movesLog, from, to);
 
             SaveLastMove(command.GameId, movesLog);
 
@@ -53,7 +53,7 @@ namespace Chess.UseCases
 
         private MovesLog GetMovesLog(string gameId)
         {
-            var movesSequenceTranslator = new MoveSequenceTranslator(new Board());
+            var movesSequenceTranslator = new MoveSequenceTranslator();
 
             var allMoves = movesRepository
                 .GetGameMoves(gameId)
@@ -70,11 +70,11 @@ namespace Chess.UseCases
             return board;
         }
 
-        private void EnsureIsValidMove(Board board, Location from, Location to)
+        private void EnsureIsValidMove(Board board, MovesLog movesLog, Location from, Location to)
         {
             var pieceMover = new PieceMover();
 
-            pieceMover.EnsureIsValidMove(board, from, to);
+            pieceMover.EnsureIsValidMove(board, movesLog, from, to);
         }
     }
 }

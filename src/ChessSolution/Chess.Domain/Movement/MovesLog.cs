@@ -27,6 +27,8 @@ namespace Chess.Domain.Movement
             AddMoves(moves);
         }
 
+        public int TotalMoves => movesSequence.Count;
+
         public MoveSequenceItem LastMove => movesSequence.LastOrDefault();
 
         public void AddMoves(IEnumerable<IMove> moves)

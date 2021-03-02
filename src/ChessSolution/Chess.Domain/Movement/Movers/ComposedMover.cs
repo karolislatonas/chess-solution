@@ -13,9 +13,9 @@ namespace Chess.Domain.Movement.Movers
             this.movers = movers;
         }
 
-        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
-            return movers.SelectMany(m => m.GetAvailableMovesFrom(board, from));
+            return movers.SelectMany(m => m.GetAvailableMovesFrom(board, movesLog, from));
         }
     }
 }

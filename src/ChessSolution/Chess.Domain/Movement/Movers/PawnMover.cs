@@ -7,14 +7,14 @@ namespace Chess.Domain.Movement.Movers
 {
     public class PawnMover : IMover
     {
-        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
             var pawn = board.GetPieceAt<Pawn>(from);
 
             return GetPossibleMoveDirections(pawn, from)
                 .Select(d => from.Add(d))
                 .TakeWhile(l => !board.ContainsPieceAt(l))
-                .Select(l => new SimpleMove(from, l));
+                .Select(l => CreateMove(from, l));
         }
 
         private static IEnumerable<Location> GetPossibleMoveDirections(Pawn pawn, Location from)
@@ -27,6 +27,12 @@ namespace Chess.Domain.Movement.Movers
             return moveDirections;
         }
 
-      
+        private IMove CreateMove(Location from, Location to)
+        {
+            if (to.Row == 1 || to.Row == 8)
+                return new PromotionMove(from, to);
+
+            return new SimpleMove(from, to);
+        }
     }
 }

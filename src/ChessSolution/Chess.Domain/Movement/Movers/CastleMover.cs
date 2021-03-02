@@ -8,7 +8,7 @@ namespace Chess.Domain.Movement.Movers
 {
     public class CastleMover : IMover
     {
-        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board,MovesLog movesLog, Location from)
         {
             if (!IsInitialKingPosition(from))
                 return Enumerable.Empty<IMove>();

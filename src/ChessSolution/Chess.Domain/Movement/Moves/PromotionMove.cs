@@ -4,18 +4,18 @@ namespace Chess.Domain.Movement.Moves
 {
     public class PromotionMove : MoveBase
     {
-        private readonly IPiece promoteToPiece;
-
-        public PromotionMove(Location from, Location to, IPiece promoteToPiece) : 
+        public PromotionMove(Location from, Location to) : 
             base(from, to)
         {
-            this.promoteToPiece = promoteToPiece;
+            
         }
 
         public override void ApplyChanges(Board board)
         {
+            var piece = board.GetPieceAt(From);
+
             board.RemovePieceFrom(From);
-            board.AddPieceAt(promoteToPiece, To);
+            board.AddPieceAt(new Queen(piece.Color), To);
         }
     }
 }

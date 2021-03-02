@@ -47,7 +47,7 @@ namespace Chess.WebUI.ViewModels
             var piece = board.GetPieceAt(from);
 
             var availableMoves = turnsTracker.IsTurnFor(piece.Color) ?
-                pieceMover.GetAvailableMoves(board, from) :
+                pieceMover.GetAvailableMoves(board, movesReplayer.MovesLog, from) :
                 new IMove[0];
                 
             SelectedPiece = new PieceSelection(from, piece, availableMoves);
@@ -146,7 +146,7 @@ namespace Chess.WebUI.ViewModels
         {
             var movesResponse = await movementService.GetGameMovesAsync(gameId);
 
-            var movesSequenceTranslator = new MoveSequenceTranslator(new Board());
+            var movesSequenceTranslator = new MoveSequenceTranslator();
 
             var moves = movesResponse
                 .Moves

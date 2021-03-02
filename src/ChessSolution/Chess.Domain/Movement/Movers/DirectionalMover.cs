@@ -6,7 +6,7 @@ namespace Chess.Domain.Movement.Movers
 {
     public class DirectionalMover : IMover
     {
-        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
             var possibleMoveDirections = board.GetPieceAt(from).MoveDirections;
 

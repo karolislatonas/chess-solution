@@ -5,11 +5,11 @@ namespace Chess.Domain.Movement
 {
     public class MoveSequenceTranslator
     {
-        private readonly Board board;
+        private readonly MovesReplayer movesReplayer;
 
-        public MoveSequenceTranslator(Board board)
+        public MoveSequenceTranslator()
         {
-            this.board = board;
+            movesReplayer = new MovesReplayer(new MovesLog());
         }
 
         public IMove TranslateNextMove(PieceMove pieceMove)
@@ -19,13 +19,13 @@ namespace Chess.Domain.Movement
 
         public IMove TranslateNextMove(Location from, Location to)
         {
-            var piece = board.GetPieceAt(from);
+            var piece = movesReplayer.Board.GetPieceAt(from);
 
             var move = piece.Mover
-                .GetAvailableMovesFrom(board, from)
+                .GetAvailableMovesFrom(movesReplayer.Board, movesReplayer.MovesLog, from)
                 .First(m => m.To == to);
 
-            board.ApplyMove(move);
+            movesReplayer.AddMove(move);
 
             return move;
         }
