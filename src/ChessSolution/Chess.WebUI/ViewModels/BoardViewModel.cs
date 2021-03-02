@@ -2,6 +2,7 @@
 using Chess.Api.DataContracts;
 using Chess.Domain;
 using Chess.Domain.Movement;
+using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
 using Chess.WebUI.Translations;
 using System;
@@ -47,7 +48,7 @@ namespace Chess.WebUI.ViewModels
 
             var availableMoves = turnsTracker.IsTurnFor(piece.Color) ?
                 pieceMover.GetAvailableMoves(board, from) :
-                new HashSet<Location>();
+                new IMove[0];
                 
             SelectedPiece = new PieceSelection(from, piece, availableMoves);
         }
@@ -117,7 +118,7 @@ namespace Chess.WebUI.ViewModels
 
             //await PushMoveAsync(selectedPiece.From, to);
 
-            var move = pieceMover.CreateMove(movesReplayer.Board, selectedPiece.From, to);
+            var move = selectedPiece.GetMoveAt(to);
             movesReplayer.AddMove(move);
 
             NotifyStateChanged();

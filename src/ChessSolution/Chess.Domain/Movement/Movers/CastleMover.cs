@@ -8,21 +8,18 @@ namespace Chess.Domain.Movement.Movers
 {
     public class CastleMover : IMover
     {
-        public IMove CreateMove(Board board, Location from, Location to)
-        {
-            return new CastleMove(from, to);
-        }
-
-        public IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
         {
             if (!IsInitialKingPosition(from))
-                return Enumerable.Empty<Location>();
+                return Enumerable.Empty<IMove>();
 
             var king = board.GetPieceAt<King>(from);
 
             var rookLocationForCastle = GetRookLocationsForCastle(board, from);
 
-            return rookLocationForCastle.Select(rl => GetCastleMoveLocation(from, rl));
+            return rookLocationForCastle
+                .Select(rl => GetCastleMoveLocation(from, rl))
+                .Select(l => CreateMove(from, l));
         }
 
         private bool IsInitialKingPosition(Location location)
@@ -68,6 +65,11 @@ namespace Chess.Domain.Movement.Movers
             }
 
             return true;
+        }
+
+        private IMove CreateMove(Location from, Location to)
+        {
+            return new CastleMove(from, to);
         }
     }
 }

@@ -13,18 +13,9 @@ namespace Chess.Domain.Movement.Movers
             this.movers = movers;
         }
 
-        public IMove CreateMove(Board board, Location from, Location to)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, Location from)
         {
-            var mover = movers.First(m => m.GetAvailableMovesFrom(board, from).Any(l => l == to));
-
-            return mover.CreateMove(board, from, to);
-        }
-
-        public IEnumerable<Location> GetAvailableMovesFrom(Board board, Location from)
-        {
-            return movers
-                .SelectMany(m => m.GetAvailableMovesFrom(board, from))
-                .Distinct();
+            return movers.SelectMany(m => m.GetAvailableMovesFrom(board, from));
         }
     }
 }

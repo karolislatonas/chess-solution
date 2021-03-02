@@ -12,7 +12,7 @@ namespace Chess.Domain.Movement
         {
             var mover = GetPieceMover(board, from);
 
-            var canMoveTo = mover.GetAvailableMovesFrom(board, from).Any(l => l == to);
+            var canMoveTo = mover.GetAvailableMovesFrom(board, from).Any(l => l.To == to);
 
             if (!canMoveTo)
             {
@@ -20,16 +20,11 @@ namespace Chess.Domain.Movement
             }
         }
 
-        public HashSet<Location> GetAvailableMoves(Board board, Location from)
+        public IMove[] GetAvailableMoves(Board board, Location from)
         {
             var mover = GetPieceMover(board, from);
 
-            return new HashSet<Location>(mover.GetAvailableMovesFrom(board, from));
-        }
-
-        public IMove CreateMove(Board board, Location from, Location to)
-        {
-            return GetPieceMover(board, from).CreateMove(board, from, to);
+            return mover.GetAvailableMovesFrom(board, from).ToArray();
         }
 
         private IMover GetPieceMover(Board board, Location from)

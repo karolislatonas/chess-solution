@@ -1,4 +1,5 @@
 ﻿using Chess.Domain.Movement.Moves;
+using System.Linq;
 
 namespace Chess.Domain.Movement
 {
@@ -20,14 +21,13 @@ namespace Chess.Domain.Movement
         {
             var piece = board.GetPieceAt(from);
 
-            var move = piece.Mover.CreateMove(board, from, to);
+            var move = piece.Mover
+                .GetAvailableMovesFrom(board, from)
+                .First(m => m.To == to);
 
             board.ApplyMove(move);
 
             return move;
         }
-
-        
- 
     }
 }
