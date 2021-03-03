@@ -12,6 +12,11 @@ namespace Chess.Domain
     {
         private readonly Dictionary<Location, IPiece> pieces;
 
+        private Board(Dictionary<Location, IPiece> pieces)
+        {
+            this.pieces = pieces;
+        }
+
         public Board()
         {
             pieces = GetInitialPieciesLocations();
@@ -28,6 +33,13 @@ namespace Chess.Domain
             var piece = GetPieceAt(location);
 
             return piece?.Color == color;
+        }
+
+        public IEnumerable<Location> GetPiecesLocations(ChessColor color)
+        {
+            return pieces
+                .Where(p => p.Value.Color == color)
+                .Select(p => p.Key);
         }
 
         public TPiece GetPieceAt<TPiece>(Location location)
@@ -57,6 +69,14 @@ namespace Chess.Domain
             return null;
         }
 
+        public Location GetKingLocation(ChessColor color)
+        {
+            return pieces
+                .Where(kvp => kvp.Value.Color == color)
+                .Single(kvp => kvp.Value is King)
+                .Key;
+        }
+
         public void ApplyMoves(MovesLog movesLog)
         {
             ApplyMoves(movesLog as IEnumerable<PieceMove>);
@@ -80,13 +100,13 @@ namespace Chess.Domain
 
         public void MovePieceFromTo(Location from, Location to)
         {
-            if (!pieces.TryGetValue(from, out var piece))
-            {
-                throw new Exception();
-            }
+            var pieceToMove = GetPieceAt(from);
+            
+            if(pieceToMove == null)
+                throw new Exception($"Where is no piece at Row-{from.Row}, Col-{from.Column}.");
 
-            RemovePieceFrom(from);
-            AddPieceAt(piece, to);
+            pieces.Remove(from);
+            pieces.Add(to, pieceToMove);
         }
 
         public void AddPieceAt(IPiece piece, Location at)
@@ -96,7 +116,20 @@ namespace Chess.Domain
 
         public void RemovePieceFrom(Location from)
         {
+            var pieceToRemove = GetPieceAt(from);
+
+            if (pieceToRemove == null)
+                throw new Exception($"Where is no piece at Row-{from.Row}, Col-{from.Column}.");
+
+            if(pieceToRemove is King)
+                throw new Exception($"King cannot be removed from board.");
+
             pieces.Remove(from);
+        }
+
+        public Board GetCopy()
+        {
+            return new Board(pieces.ToDictionary(kvp => kvp.Key, kvp => kvp.Value));
         }
 
         private static Dictionary<Location, IPiece> GetInitialPieciesLocations()

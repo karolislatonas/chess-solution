@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace Chess.Domain.Movement
 {
-    [DebuggerDisplay("X-{X}, Y-{Y}")]
+    [DebuggerDisplay("Col-{X}, Row-{Y}")]
     public class Location : IEquatable<Location>
     {
         public Location(int column, int row)
