@@ -5,6 +5,7 @@
         @foreach (var move in BoardViewModel.Moves)
         {
             <MoveView Move="@move"
+                      BoardDetails="@BoardViewModel.BoardDetails"
                       IsSelected="@(move.SequenceNumber == BoardViewModel.CurrentMoveNumber)"
                       OnSelect="@(() => BoardViewModel.ToMove(move.SequenceNumber))" />
         }

@@ -1,4 +1,5 @@
-﻿using Chess.Domain.Movement;
+﻿using Chess.Domain;
+using Chess.Domain.Movement;
 using Microsoft.AspNetCore.Components;
 using System;
 
@@ -8,6 +9,9 @@ namespace Chess.WebUI.Components
     {
         [Parameter]
         public PieceMove Move { get; set; }
+
+        [Parameter]
+        public BoardDetails BoardDetails { get; set; }
 
         [Parameter]
         public Action OnSelect { get; set; }

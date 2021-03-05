@@ -36,6 +36,8 @@ namespace Chess.WebUI.ViewModels
 
         public int CurrentMoveNumber => movesReplayer.CurrentMoveNumber;
 
+        public BoardDetails BoardDetails => movesReplayer.Board.BoardDetails;
+
         public IEnumerable<PieceMove> Moves => movesReplayer.MovesLog.Select(m => new PieceMove(m.SequenceNumber, m.Move.From, m.Move.To));
 
         public IPiece GetPieceAt(Location location) => movesReplayer.Board.GetPieceAt(location);

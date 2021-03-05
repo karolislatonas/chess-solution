@@ -20,7 +20,10 @@ namespace Chess.Domain
         public Board()
         {
             pieces = GetInitialPieciesLocations();
+            BoardDetails = new BoardDetails();
         }
+
+        public BoardDetails BoardDetails { get; }
 
         public bool IsWithinBoard(Location location)
         {
