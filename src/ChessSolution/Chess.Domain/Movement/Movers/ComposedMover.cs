@@ -17,5 +17,10 @@ namespace Chess.Domain.Movement.Movers
         {
             return movers.SelectMany(m => m.GetAvailableMovesFrom(board, movesLog, from));
         }
+
+        public bool CanTakeAt(Board board, Location from, Location takeAt)
+        {
+            return movers.Any(m => m.CanTakeAt(board, from, takeAt));
+        }
     }
 }

@@ -8,12 +8,22 @@ namespace Chess.Domain.Movement.Movers
     {
         public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
+            return GetAvailableMoveLocations(board, from)
+                .Select(l => CreateMove(board, from, l));
+        }
+
+        public bool CanTakeAt(Board board, Location from, Location takeAt)
+        {
+            return GetAvailableMoveLocations(board, from).Any(l => l == takeAt);
+        }
+
+        private IEnumerable<Location> GetAvailableMoveLocations(Board board, Location from)
+        {
             var possibleMoveDirections = board.GetPieceAt(from).MoveDirections;
 
             return possibleMoveDirections
                 .SelectMany(d => GetAvailablesMovesInDirection(board, from, d))
-                .Where(board.IsWithinBoard)
-                .Select(l => CreateMove(board, from, l));
+                .Where(board.IsWithinBoard);
         }
 
         private static IEnumerable<Location> GetAvailablesMovesInDirection(Board board, Location from, Location direction)
@@ -25,7 +35,7 @@ namespace Chess.Domain.Movement.Movers
             var isBlockedByOtherPiece = false;
 
             while (board.IsWithinBoard(location) &&
-                   !board.IsPieceOfColor(location, piece.Color) &&
+                   !board.IsPieceOfColorAt(location, piece.Color) &&
                    !isBlockedByOtherPiece)
             {
                 yield return location;

@@ -17,6 +17,11 @@ namespace Chess.Domain.Movement.Movers
                 .Select(l => CreateMove(from, l));
         }
 
+        public bool CanTakeAt(Board board, Location from, Location takeAt)
+        {
+            return false;
+        }
+
         private static IEnumerable<Location> GetPossibleMoveDirections(Pawn pawn, Location from)
         {
             var moveDirections = pawn.MoveDirections.AsEnumerable();

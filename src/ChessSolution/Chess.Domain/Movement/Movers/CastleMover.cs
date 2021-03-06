@@ -1,4 +1,5 @@
-﻿using Chess.Domain.Movement.Moves;
+﻿using Chess.Domain.Extensions;
+using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,25 @@ namespace Chess.Domain.Movement.Movers
 {
     public class CastleMover : IMover
     {
-        public IEnumerable<IMove> GetAvailableMovesFrom(Board board,MovesLog movesLog, Location from)
+        public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
             if (!IsInitialKingPosition(from))
                 return Enumerable.Empty<IMove>();
 
             var king = board.GetPieceAt<King>(from);
 
-            var rookLocationForCastle = GetRookLocationsForCastle(board, from);
+            var rookLocationsForCastle = GetRookLocationsForCastle(board, from);
 
-            return rookLocationForCastle
-                .Select(rl => GetCastleMoveLocation(from, rl))
-                .Select(l => CreateMove(from, l));
+            return rookLocationsForCastle
+                .Select(rookLoc => GetCastlePassingLocation(from, rookLoc))
+                .Where(locs => CanKingPassLocations(board, from, king.Color, locs))
+                .Select(locs => locs.Last())
+                .Select(loc => new CastleMove(from, loc));
+        }
+
+        public bool CanTakeAt(Board board, Location from, Location takeAt)
+        {
+            return false;
         }
 
         private bool IsInitialKingPosition(Location location)
@@ -28,11 +36,26 @@ namespace Chess.Domain.Movement.Movers
                 location == new Location(5, 8);
         }
 
-        private Location GetCastleMoveLocation(Location kingLocation, Location rookLocation)
+        private bool CanKingPassLocations(Board board, Location kingLocation, ChessColor kingColor, Location[] passingLocations)
+        {
+            var opponentPiecesLocations = board.GetPiecesLocations(kingColor.GetOpposite());
+
+            var boardWithoutKing = board.GetCopy();
+            boardWithoutKing.RemovePieceFrom(kingLocation);
+
+            return !opponentPiecesLocations
+                .Any(pl => passingLocations.Any(l => pl.Piece.Mover.CanTakeAt(boardWithoutKing, pl.Location, l)));
+        }
+
+        private Location[] GetCastlePassingLocation(Location kingLocation, Location rookLocation)
         {
             var direction = Math.Sign((rookLocation - kingLocation).Column);
 
-            return kingLocation.AddColumns(2 * direction);
+            return new Location[]
+            {
+                kingLocation.AddColumns(direction),
+                kingLocation.AddColumns(2 * direction)
+            };
         }
 
         private IEnumerable<Location> GetRookLocationsForCastle(Board board, Location from)
@@ -65,11 +88,6 @@ namespace Chess.Domain.Movement.Movers
             }
 
             return true;
-        }
-
-        private IMove CreateMove(Location from, Location to)
-        {
-            return new CastleMove(from, to);
         }
     }
 }

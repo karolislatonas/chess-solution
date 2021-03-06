@@ -17,6 +17,11 @@ namespace Chess.Domain.Movement.Movers
                 .Concat(GetPassingPawnTakeMoves(board, movesLog, from));
         }
 
+        public bool CanTakeAt(Board board, Location from, Location takeAt)
+        {
+            return GetRegularTakeMoves(board, from).Any(m => m.To == takeAt);
+        }
+
         private IEnumerable<IMove> GetRegularTakeMoves(Board board, Location from)
         {
             var piece = board.GetPieceAt<Pawn>(from);
@@ -24,7 +29,7 @@ namespace Chess.Domain.Movement.Movers
             return piece
                  .TakeDirections
                  .Select(d => from.Add(d))
-                 .Where(l => board.IsPieceOfColor(l, piece.Color.GetOpposite()))
+                 .Where(l => board.IsPieceOfColorAt(l, piece.Color.GetOpposite()))
                  .Select(l => new TakeMove(from, l));
         }
 
@@ -43,7 +48,6 @@ namespace Chess.Domain.Movement.Movers
             return takeLocations
                 .Where(l => l == passedLocationByPawn)
                 .Select(l => new PassedPawnTakeMove(from, l));
-
         }
 
         private bool PassingPawnCanBeTaken(Board board, MovesLog movesLog, Location from)

@@ -24,27 +24,16 @@ namespace Chess.Domain.Movement
             return EnumerateAvailableMoves(board, movesLog, from).ToArray();
         }
 
-        public bool IsCheckMateFor(Board board, MovesLog movesLog, ChessColor color)
+        public bool CanPlayerMove(Board board, MovesLog movesLog, ChessColor color)
         {
             var piecesLocations = board.GetPiecesLocations(color);
 
-            var canMove = piecesLocations.Any(l => GetAvailableMoves(board, movesLog, l).Any());
+            var canMove = piecesLocations.Any(pieceLoc => GetAvailableMoves(board, movesLog, pieceLoc.Location).Any());
 
-            return !canMove;
+            return canMove;
         }
 
-        private bool IsCheckAfterMove(Board board, MovesLog movesLog, IMove move)
-        {
-            var movingColor = board.GetPieceAt(move.From).Color;
-
-            var newBoard = board.GetCopy();
-
-            newBoard.ApplyMove(move);
-
-            return IsCheckFor(newBoard, movesLog, movingColor);
-        }
-
-        public bool IsCheckFor(Board board, MovesLog movesLog, ChessColor color)
+        public bool IsCheckFor(Board board, ChessColor color)
         {
             var kingLocation = board.GetKingLocation(color);
 
@@ -52,20 +41,9 @@ namespace Chess.Domain.Movement
             var opponentPiecesLocations = board.GetPiecesLocations(opponentColor);
 
             var kingCanBeTakeByOpponentPiece = opponentPiecesLocations
-                .Any(loc => CanPieceTakeAtLocation(board, movesLog, loc, kingLocation));
+                .Any(pieceLoc => CanPieceTakeAtLocation(board, pieceLoc.Location, kingLocation));
 
             return kingCanBeTakeByOpponentPiece;
-        }
-
-        private bool CanPieceTakeAtLocation(Board board, MovesLog movesLog, Location moveFrom, Location takeAt)
-        {
-            var piece = board.GetPieceAt(moveFrom);
-
-            var availableTakes = piece.Mover
-                .GetAvailableMovesFrom(board, movesLog, moveFrom)
-                .OfType<TakeMove>();
-
-            return availableTakes.Any(l => l.To == takeAt);
         }
 
         private IEnumerable<IMove> EnumerateAvailableMoves(Board board, MovesLog movesLog, Location from)
@@ -74,7 +52,25 @@ namespace Chess.Domain.Movement
 
             return mover
                 .GetAvailableMovesFrom(board, movesLog, from)
-                .Where(m => !IsCheckAfterMove(board, movesLog, m));
+                .Where(m => !IsCheckAfterMove(board, m));
+        }
+
+        private bool IsCheckAfterMove(Board board, IMove move)
+        {
+            var movingColor = board.GetPieceAt(move.From).Color;
+
+            var newBoard = board.GetCopy();
+
+            newBoard.ApplyMove(move);
+
+            return IsCheckFor(newBoard, movingColor);
+        }
+
+        private bool CanPieceTakeAtLocation(Board board, Location moveFrom, Location takeAt)
+        {
+            var mover = GetPieceMover(board, moveFrom);
+
+            return mover.CanTakeAt(board, moveFrom, takeAt);
         }
 
         private IMover GetPieceMover(Board board, Location from)

@@ -121,8 +121,8 @@ namespace Chess.WebUI.ViewModels
             //await PushMoveAsync(selectedPiece.From, to);
 
             var move = selectedPiece.GetMoveAt(to);
-            movesReplayer.AddMove(move);
 
+            movesReplayer.AddMove(move);
             NotifyStateChanged();
         }
 

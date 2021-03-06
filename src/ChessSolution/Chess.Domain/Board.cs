@@ -1,4 +1,5 @@
-﻿using Chess.Domain.Movement;
+﻿using Chess.Domain.Extensions;
+using Chess.Domain.Movement;
 using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
 using System;
@@ -31,18 +32,18 @@ namespace Chess.Domain
                    1 <= location.Row && location.Row <= 8;
         }
 
-        public bool IsPieceOfColor(Location location, ChessColor color)
+        public bool IsPieceOfColorAt(Location location, ChessColor color)
         {
             var piece = GetPieceAt(location);
 
             return piece?.Color == color;
         }
 
-        public IEnumerable<Location> GetPiecesLocations(ChessColor color)
+        public IEnumerable<PieceLocation> GetPiecesLocations(ChessColor color)
         {
             return pieces
                 .Where(p => p.Value.Color == color)
-                .Select(p => p.Key);
+                .Select(kvp => new PieceLocation(kvp.Value, kvp.Key));
         }
 
         public TPiece GetPieceAt<TPiece>(Location location)
@@ -123,9 +124,6 @@ namespace Chess.Domain
 
             if (pieceToRemove == null)
                 throw new Exception($"Where is no piece at Row-{from.Row}, Col-{from.Column}.");
-
-            if(pieceToRemove is King)
-                throw new Exception($"King cannot be removed from board.");
 
             pieces.Remove(from);
         }
