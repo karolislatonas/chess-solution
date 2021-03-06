@@ -11,16 +11,16 @@ namespace Chess.Domain
 {
     public class Board
     {
-        private readonly Dictionary<Location, IPiece> pieces;
+        private readonly Dictionary<Location, PieceLocation> pieces;
 
-        private Board(Dictionary<Location, IPiece> pieces)
+        private Board(Dictionary<Location, PieceLocation> pieces)
         {
             this.pieces = pieces;
         }
 
         public Board()
         {
-            pieces = GetInitialPieciesLocations();
+            pieces = GetInitialPieciesLocations().ToDictionary(kvp => kvp.Key, kvp => new PieceLocation(kvp.Value, kvp.Key));
             BoardDetails = new BoardDetails();
         }
 
@@ -42,8 +42,8 @@ namespace Chess.Domain
         public IEnumerable<PieceLocation> GetPiecesLocations(ChessColor color)
         {
             return pieces
-                .Where(p => p.Value.Color == color)
-                .Select(kvp => new PieceLocation(kvp.Value, kvp.Key));
+                .Values
+                .Where(p => p.Piece.Color == color);
         }
 
         public TPiece GetPieceAt<TPiece>(Location location)
@@ -63,9 +63,9 @@ namespace Chess.Domain
             return pieces.ContainsKey(location);
         }
 
-        public IPiece GetPieceAt(Location location)
+        public PieceLocation GetPieceLocationAt(Location location)
         {
-            if(pieces.TryGetValue(location, out var piece))
+            if (pieces.TryGetValue(location, out var piece))
             {
                 return piece;
             }
@@ -73,12 +73,20 @@ namespace Chess.Domain
             return null;
         }
 
+        public IPiece GetPieceAt(Location location)
+        {
+            var pieceLocation = GetPieceLocationAt(location);
+
+            return pieceLocation?.Piece;
+        }
+
         public Location GetKingLocation(ChessColor color)
         {
             return pieces
-                .Where(kvp => kvp.Value.Color == color)
-                .Single(kvp => kvp.Value is King)
-                .Key;
+                .Values
+                .Where(p => p.Piece.Color == color)
+                .Single(p => p.Piece is King)
+                .Location;
         }
 
         public void ApplyMoves(MovesLog movesLog)
@@ -104,18 +112,20 @@ namespace Chess.Domain
 
         public void MovePieceFromTo(Location from, Location to)
         {
-            var pieceToMove = GetPieceAt(from);
+            var pieceLocation = GetPieceLocationAt(from);
             
-            if(pieceToMove == null)
+            if(pieceLocation == null)
                 throw new Exception($"Where is no piece at Row-{from.Row}, Col-{from.Column}.");
 
+            var newPieceLocation = pieceLocation.WithNewLocation(to);
+
             pieces.Remove(from);
-            pieces.Add(to, pieceToMove);
+            pieces.Add(to, newPieceLocation);
         }
 
-        public void AddPieceAt(IPiece piece, Location at)
+        public void AddPieceAt(Location at, IPiece piece)
         {
-            pieces.Add(at, piece);
+            pieces.Add(at, new PieceLocation(piece, at));
         }
 
         public void RemovePieceFrom(Location from)

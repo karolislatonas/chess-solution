@@ -14,5 +14,11 @@ namespace Chess.Domain
         public IPiece Piece { get; }
 
         public Location Location { get; }
+        
+        public PieceLocation WithNewLocation(Location newLocation)
+        {
+            return new PieceLocation(Piece, newLocation);
+        }
+
     }
 }

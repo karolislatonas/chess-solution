@@ -15,7 +15,7 @@ namespace Chess.Domain.Movement.Moves
             var piece = board.GetPieceAt(From);
 
             board.RemovePieceFrom(From);
-            board.AddPieceAt(new Queen(piece.Color), To);
+            board.AddPieceAt(To, new Queen(piece.Color));
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Chess.Domain.Movement.Movers
 
             return GetPossibleRookLocationsForCastle(row)
                 .Where(board.ContainsPieceAt)
-                .Where(l => board.IsPieceOfTypeAt<Rook>(l))
+                .Where(board.IsPieceOfTypeAt<Rook>)
                 .Where(l => NoPiecesBetweenColumnsInRow(board, row, from.Column, l.Column));
         }
 
