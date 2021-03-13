@@ -1,4 +1,5 @@
 ﻿using Chess.Domain.Movement.Moves;
+using System;
 using System.Linq;
 
 namespace Chess.Domain.Movement
@@ -14,6 +15,8 @@ namespace Chess.Domain.Movement
 
         public IMove TranslateNextMove(PieceMove pieceMove)
         {
+            EnsureNextMoveIsInSequence(pieceMove);
+
             return TranslateNextMove(pieceMove.From, pieceMove.To);
         }
 
@@ -26,8 +29,17 @@ namespace Chess.Domain.Movement
                 .First(m => m.To == to);
 
             movesReplayer.AddMove(move);
+            movesReplayer.ToLastMove();
 
             return move;
+        }
+
+        private void EnsureNextMoveIsInSequence(PieceMove pieceMove)
+        {
+            var nextMoveSequenceNumber = movesReplayer.MovesLog.NextMoveSequenceNumber();
+
+            if (pieceMove.SequenceNumber != nextMoveSequenceNumber)
+                throw new Exception();
         }
     }
 }

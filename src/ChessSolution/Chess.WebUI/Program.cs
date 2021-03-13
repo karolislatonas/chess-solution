@@ -1,7 +1,9 @@
 using Chess.Api.Client;
+using Chess.Api.Client.Notifiers;
 using Chess.WebUI.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
 
 namespace Chess.WebUI
@@ -15,6 +17,7 @@ namespace Chess.WebUI
 
             builder.Services.AddTransient<BoardViewModel>();
             builder.Services.AddTransient<IndexViewModel>();
+            builder.Services.AddTransient(CreateMoveNotifier);
             builder.Services.AddSingleton<GameService>();
             builder.Services.AddSingleton<MovementService>();
 
@@ -23,6 +26,11 @@ namespace Chess.WebUI
             await builder
                 .Build()
                 .RunAsync();
+        }
+
+        private static IMoveNotifier CreateMoveNotifier(IServiceProvider arg)
+        {
+            return new SignalRMoveNotifier("http://localhost:6001/movehub");
         }
     }
 }

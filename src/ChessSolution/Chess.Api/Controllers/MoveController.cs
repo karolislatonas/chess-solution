@@ -1,6 +1,8 @@
 ﻿using Chess.Api.DataContracts;
+using Chess.Messaging;
 using Chess.Api.Translators;
 using Chess.Data;
+using Chess.Messages.Events;
 using Chess.UseCases;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -11,10 +13,12 @@ namespace Chess.Api.Controllers
     public class MoveController : ControllerBase
     {
         private readonly IMovesRepository moveRepository;
+        private readonly IServiceBus serviceBus;
 
-        public MoveController(IMovesRepository moveRepository)
+        public MoveController(IMovesRepository moveRepository, IServiceBus serviceBus)
         {
             this.moveRepository = moveRepository;
+            this.serviceBus = serviceBus;
         }
 
         [HttpGet]
@@ -42,7 +46,7 @@ namespace Chess.Api.Controllers
         {
             var command = movePieceRequest.AsCommand(gameId);
 
-            var commandHandler = new MovePieceCommandHandler(moveRepository);
+            var commandHandler = new MovePieceCommandHandler(moveRepository, serviceBus);
 
             var moveSequenceNumber = commandHandler.ExecuteCommand(command);
 

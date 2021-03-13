@@ -32,7 +32,6 @@ namespace Chess.Domain.Movement
         public void AddMove(IMove move)
         {
             MovesLog.AddMove(move);
-            ToLastMove();
         }
 
         public void ToPreviousMove()

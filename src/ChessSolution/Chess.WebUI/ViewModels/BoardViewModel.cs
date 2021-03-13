@@ -4,30 +4,35 @@ using Chess.Domain;
 using Chess.Domain.Movement;
 using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
+using Chess.Api.Client.Notifiers;
 using Chess.WebUI.Translations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Chess.Messages.Events;
 
 namespace Chess.WebUI.ViewModels
 {
     public class BoardViewModel
     {
-        private readonly PieceMover pieceMover;
         private readonly MovementService movementService;
+        private readonly IMoveNotifier moveNotifier;
+        private readonly PieceMover pieceMover;
         private readonly MovesReplayer movesReplayer;
         private readonly TurnsTracker turnsTracker;
+        private readonly MoveSequenceTranslator movesSequenceTranslator;
 
         private string gameId;
 
         public event Action OnStateChanged;
 
-        public BoardViewModel(MovementService movementService)
+        public BoardViewModel(MovementService movementService, IMoveNotifier moveNotifier)
         {
             this.movementService = movementService;
-
+            this.moveNotifier = moveNotifier;
             pieceMover = new PieceMover();
+            movesSequenceTranslator = new MoveSequenceTranslator();
             movesReplayer = new MovesReplayer(new MovesLog());
             turnsTracker = new TurnsTracker(movesReplayer.MovesLog);
         }
@@ -106,24 +111,19 @@ namespace Chess.WebUI.ViewModels
             var selectedPiece = SelectedPiece;
             ClearPieceSelection();
 
-            if (selectedPiece == null)
-                return;
-
-            if (!selectedPiece.CanMoveTo(to))
-                return;
-
             if (!movesReplayer.IsAtLastMove)
             {
                 ToLastMove();
                 return;
             }
 
-            //await PushMoveAsync(selectedPiece.From, to);
+            if (selectedPiece == null)
+                return;
 
-            var move = selectedPiece.GetMoveAt(to);
+            if (!selectedPiece.CanMoveTo(to))
+                return;
 
-            movesReplayer.AddMove(move);
-            NotifyStateChanged();
+            await PushMoveAsync(selectedPiece.From, to);
         }
 
         public async Task PushMoveAsync(Location from, Location to)
@@ -141,24 +141,26 @@ namespace Chess.WebUI.ViewModels
         {
             gameId = initialiseGameId;
 
-            //await InitialiseMovesAsync();
+            await moveNotifier.SubscribeFromStartAsync(gameId, OnPieceMoved);
         }
 
-        private async Task InitialiseMovesAsync()
+        private void OnPieceMoved(PieceMovedEvent pieceMovedEvent)
         {
-            var movesResponse = await movementService.GetGameMovesAsync(gameId);
+            var from = new Location(pieceMovedEvent.From.Column, pieceMovedEvent.From.Row);
+            var to = new Location(pieceMovedEvent.To.Column, pieceMovedEvent.To.Row);
 
-            var movesSequenceTranslator = new MoveSequenceTranslator();
+            var move = movesSequenceTranslator.TranslateNextMove(from, to);
 
-            var moves = movesResponse
-                .Moves
-                .Select(m => m.AsDomain())
-                .Select(movesSequenceTranslator.TranslateNextMove);
+            var shouldUpdateToLatest = movesReplayer.IsAtLastMove;
 
-            foreach (var move in moves)
-                movesReplayer.AddMove(move);
+            movesReplayer.AddMove(move);
+
+            if(shouldUpdateToLatest)
+                movesReplayer.ToLastMove();
+
+            NotifyStateChanged();
         }
-     
+
         private void NotifyStateChanged()
         {
             OnStateChanged?.Invoke();

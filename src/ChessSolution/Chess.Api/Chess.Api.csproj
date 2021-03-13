@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Chess.Api.DataContracts\Chess.Api.DataContracts.csproj" />
     <ProjectReference Include="..\Chess.Data.InMemory\Chess.Data.InMemory.csproj" />
+    <ProjectReference Include="..\Chess.Messaging\Chess.Messaging.csproj" />
     <ProjectReference Include="..\Chess.UseCases\Chess.UseCases.csproj" />
   </ItemGroup>
 

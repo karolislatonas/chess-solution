@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Chess.Data\Chess.Data.csproj" />
     <ProjectReference Include="..\Chess.Messages\Chess.Messages.csproj" />
+    <ProjectReference Include="..\Chess.Messaging\Chess.Messaging.csproj" />
   </ItemGroup>
 
 </Project>

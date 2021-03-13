@@ -89,20 +89,10 @@ namespace Chess.Domain
                 .Location;
         }
 
-        public void ApplyMoves(MovesLog movesLog)
-        {
-            ApplyMoves(movesLog as IEnumerable<PieceMove>);
-        }
-
-        public void ApplyMoves(IEnumerable<PieceMove> moves)
+        public void ApplyMoves(IEnumerable<IMove> moves)
         {
             foreach (var pieceMove in moves)
                 ApplyMove(pieceMove);
-        }
-
-        public void ApplyMove(PieceMove pieceMove)
-        {
-            MovePieceFromTo(pieceMove.From, pieceMove.To);
         }
 
         public void ApplyMove(IMove move)

@@ -1,3 +1,5 @@
+using Chess.Api.Hubs;
+using Chess.Messaging;
 using Chess.Data;
 using Chess.Data.InMemory;
 using Microsoft.AspNetCore.Builder;
@@ -21,6 +23,7 @@ namespace Chess.Api
         {
             services.AddSingleton<IGameRepository, InMemoryGameRepository>();
             services.AddSingleton<IMovesRepository, InMemoryMovesRepository>();
+            services.AddSingleton<IServiceBus, InMemoryServiceBus>();
 
             services.AddCors(o => o.AddPolicy("AllowOriginsAllPolicy", builder =>
             {
@@ -30,6 +33,7 @@ namespace Chess.Api
             }));
 
             services.AddControllers();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +55,7 @@ namespace Chess.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MoveHub>("/movehub");
             });
         }
     }
