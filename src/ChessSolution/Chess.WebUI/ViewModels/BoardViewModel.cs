@@ -5,7 +5,6 @@ using Chess.Domain.Movement;
 using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
 using Chess.Api.Client.Notifiers;
-using Chess.WebUI.Translations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +13,7 @@ using Chess.Messages.Events;
 
 namespace Chess.WebUI.ViewModels
 {
-    public class BoardViewModel
+    public class BoardViewModel : IDisposable
     {
         private readonly MovementService movementService;
         private readonly IMoveNotifier moveNotifier;
@@ -31,6 +30,7 @@ namespace Chess.WebUI.ViewModels
         {
             this.movementService = movementService;
             this.moveNotifier = moveNotifier;
+
             pieceMover = new PieceMover();
             movesSequenceTranslator = new MoveSequenceTranslator();
             movesReplayer = new MovesReplayer(new MovesLog());
@@ -164,6 +164,11 @@ namespace Chess.WebUI.ViewModels
         private void NotifyStateChanged()
         {
             OnStateChanged?.Invoke();
+        }
+
+        public void Dispose()
+        {
+            moveNotifier?.Dispose();
         }
     }
 }
