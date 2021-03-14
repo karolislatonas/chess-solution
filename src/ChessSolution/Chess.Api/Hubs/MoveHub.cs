@@ -9,12 +9,12 @@ namespace Chess.Api.Hubs
     public class MoveHub : Hub
     {
         private IServiceBus serviceBus;
-        private readonly IMovesRepository moveRepository;
+        private readonly IMovesRepository movesRepository;
 
-        public MoveHub(IServiceBus serviceBus, IMovesRepository moveRepository)
+        public MoveHub(IServiceBus serviceBus, IMovesRepository movesRepository)
         {
             this.serviceBus = serviceBus;
-            this.moveRepository = moveRepository;
+            this.movesRepository = movesRepository;
         }
 
         public void SubscribeToMoves(string gameId)
@@ -26,13 +26,13 @@ namespace Chess.Api.Hubs
             SetConnectionSubscriber(subscriber);
         }
 
-        public void SubscribeToMovesFrom(string gameId, int fromSequenceNumber)
+        public async Task SubscribeToMovesFrom(string gameId, int fromSequenceNumber)
         {
             ClearConnectionSubscriberIfExists();
 
-            var subscriber = new MovesSubscriber(gameId, serviceBus, Clients.Caller);
+            var subscriber = new MovesSubcriberFrom(gameId, fromSequenceNumber, serviceBus, movesRepository, Clients.Caller);
 
-            var moves = moveRepository.GetMovesFromSequence(gameId, fromSequenceNumber);
+            await subscriber.StartAsync();
 
             SetConnectionSubscriber(subscriber);
         }
@@ -44,7 +44,7 @@ namespace Chess.Api.Hubs
             await Task.CompletedTask;
         }
 
-        private void SetConnectionSubscriber(MovesSubscriber subscriber)
+        private void SetConnectionSubscriber(ISubscriber subscriber)
         {
             Context.Items[Context.ConnectionId] = subscriber;
         }
@@ -56,7 +56,7 @@ namespace Chess.Api.Hubs
                 return;
             }
 
-            var subscriber = value as MovesSubscriber;
+            var subscriber = value as ISubscriber;
             subscriber?.Unsubscribe();
 
             Context.Items.Remove(Context.ConnectionId);

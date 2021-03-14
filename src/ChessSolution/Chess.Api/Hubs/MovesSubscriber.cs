@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Chess.Api.Hubs
 {
-    public class MovesSubscriber
+    public class MovesSubscriber : ISubscriber
     {
         private readonly string gameId;
         private readonly IServiceBus serviceBus;
