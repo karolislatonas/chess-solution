@@ -53,6 +53,7 @@ namespace Chess.Domain.Movement.Movers
 
             return new Location[]
             {
+                kingLocation,
                 kingLocation.AddColumns(direction),
                 kingLocation.AddColumns(2 * direction)
             };
