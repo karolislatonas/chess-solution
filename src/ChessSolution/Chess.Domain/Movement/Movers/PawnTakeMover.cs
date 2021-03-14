@@ -30,7 +30,7 @@ namespace Chess.Domain.Movement.Movers
                  .TakeDirections
                  .Select(d => from.Add(d))
                  .Where(l => board.IsPieceOfColorAt(l, piece.Color.GetOpposite()))
-                 .Select(l => new TakeMove(from, l));
+                 .Select(l => CreateMove(from, l));
         }
 
         private IEnumerable<IMove> GetPassingPawnTakeMoves(Board board, MovesLog movesLog, Location from)
@@ -68,6 +68,21 @@ namespace Chess.Domain.Movement.Movers
                 return false;
 
             return true;
+        }
+
+        private IMove CreateMove(Location from, Location to)
+        {
+            IMove move = new TakeMove(from, to);
+
+            if (IsPromotionMove(to))
+                move = new PromotionMoveWrapper(move);
+
+            return move;
+        }
+
+        private bool IsPromotionMove(Location to)
+        {
+            return to.Row == 1 || to.Row == 8;
         }
     }
 }

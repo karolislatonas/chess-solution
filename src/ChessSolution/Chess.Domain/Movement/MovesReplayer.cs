@@ -5,13 +5,10 @@ namespace Chess.Domain.Movement
 {
     public class MovesReplayer
     {
-        public MovesReplayer(MovesLog movesLog, int moveNumber = 0)
+        public MovesReplayer(MovesLog movesLog)
         {   
             MovesLog = movesLog;
-
-            Reset();
-
-            ToMove(moveNumber);
+            Board = new Board();
         }
 
         public Board Board { get; private set; }

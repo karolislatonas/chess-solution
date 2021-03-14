@@ -34,10 +34,17 @@ namespace Chess.Domain.Movement.Movers
 
         private IMove CreateMove(Location from, Location to)
         {
-            if (to.Row == 1 || to.Row == 8)
-                return new PromotionMove(from, to);
+            IMove move = new SimpleMove(from, to);
 
-            return new SimpleMove(from, to);
+            if (IsPromotionMove(to))
+                move = new PromotionMoveWrapper(move);
+
+            return move;
+        }
+
+        private bool IsPromotionMove(Location to)
+        {
+            return to.Row == 1 || to.Row == 8;
         }
     }
 }
