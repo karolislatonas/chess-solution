@@ -1,4 +1,5 @@
 ﻿using Chess.Domain.Movement.Moves;
+using System.Collections.Generic;
 
 namespace Chess.Domain.Movement
 {
@@ -27,6 +28,11 @@ namespace Chess.Domain.Movement
                 return moveItem.Move;
 
             return null;
+        }
+
+        public void AddMoves(IEnumerable<IMove> moves)
+        {
+            MovesLog.AddMoves(moves);
         }
 
         public void AddMove(IMove move)

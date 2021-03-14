@@ -1,4 +1,5 @@
-﻿using Chess.Messaging;
+﻿using Chess.Data;
+using Chess.Messaging;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Threading.Tasks;
@@ -8,10 +9,12 @@ namespace Chess.Api.Hubs
     public class MoveHub : Hub
     {
         private IServiceBus serviceBus;
+        private readonly IMovesRepository moveRepository;
 
-        public MoveHub(IServiceBus serviceBus)
+        public MoveHub(IServiceBus serviceBus, IMovesRepository moveRepository)
         {
             this.serviceBus = serviceBus;
+            this.moveRepository = moveRepository;
         }
 
         public void SubscribeToMoves(string gameId)
@@ -19,14 +22,18 @@ namespace Chess.Api.Hubs
             ClearConnectionSubscriberIfExists();
 
             var subscriber = new MovesSubscriber(gameId, serviceBus, Clients.Caller);
+
             SetConnectionSubscriber(subscriber);
         }
 
-        public void SubscribeToMovesFromStart(string gameId)
+        public void SubscribeToMovesFrom(string gameId, int fromSequenceNumber)
         {
             ClearConnectionSubscriberIfExists();
 
             var subscriber = new MovesSubscriber(gameId, serviceBus, Clients.Caller);
+
+            var moves = moveRepository.GetMovesFromSequence(gameId, fromSequenceNumber);
+
             SetConnectionSubscriber(subscriber);
         }
 

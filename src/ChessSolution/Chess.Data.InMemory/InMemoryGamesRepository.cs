@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace Chess.Data.InMemory
 {
-    public class InMemoryGameRepository : IGameRepository
+    public class InMemoryGamesRepository : IGamesRepository
     {
         private readonly ConcurrentBag<Game> games;
 
-        public InMemoryGameRepository()
+        public InMemoryGamesRepository()
         {
             games = new ConcurrentBag<Game>();
         }

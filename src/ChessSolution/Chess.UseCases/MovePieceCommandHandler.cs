@@ -88,6 +88,7 @@ namespace Chess.UseCases
             serviceBus.Publish(new PieceMovedEvent
             {
                 GameId = gameId,
+                SequenceNumber = move.SequenceNumber,
                 From = move.From.AsMessage(),
                 To = move.To.AsMessage()
             });

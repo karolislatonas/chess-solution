@@ -11,9 +11,9 @@ namespace Chess.Api.Controllers
     [Route("api/game")]
     public class GameController : ControllerBase
     {
-        private readonly IGameRepository gameRepository;
+        private readonly IGamesRepository gameRepository;
 
-        public GameController(IGameRepository gameRepository)
+        public GameController(IGamesRepository gameRepository)
         {
             this.gameRepository = gameRepository;
         }

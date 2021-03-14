@@ -7,9 +7,9 @@ namespace Chess.UseCases
 {
     public class StartGameCommanHandler : CommandHandlerBase<StartNewGameCommand, string>
     {
-        private readonly IGameRepository gameRepository;
+        private readonly IGamesRepository gameRepository;
 
-        public StartGameCommanHandler(IGameRepository gameRepository)
+        public StartGameCommanHandler(IGamesRepository gameRepository)
         {
             this.gameRepository = gameRepository;
         }

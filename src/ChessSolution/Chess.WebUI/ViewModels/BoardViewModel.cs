@@ -4,32 +4,35 @@ using Chess.Domain;
 using Chess.Domain.Movement;
 using Chess.Domain.Movement.Moves;
 using Chess.Domain.Pieces;
-using Chess.Api.Client.Notifiers;
+using Chess.Api.Client.Subscription;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Chess.Messages.Events;
+using Chess.Api.Client.Subscription.Subscribers;
+using Chess.WebUI.Translations;
 
 namespace Chess.WebUI.ViewModels
 {
     public class BoardViewModel : IDisposable
     {
         private readonly MovementService movementService;
-        private readonly IMoveNotifier moveNotifier;
+        private readonly ISubscriptionProvider subscriptionProvider;
         private readonly PieceMover pieceMover;
         private readonly MovesReplayer movesReplayer;
         private readonly TurnsTracker turnsTracker;
         private readonly MoveSequenceTranslator movesSequenceTranslator;
 
         private string gameId;
+        private ISubscriber movesSubscriber;
 
         public event Action OnStateChanged;
 
-        public BoardViewModel(MovementService movementService, IMoveNotifier moveNotifier)
+        public BoardViewModel(MovementService movementService, ISubscriptionProvider subscriptionProvider)
         {
             this.movementService = movementService;
-            this.moveNotifier = moveNotifier;
+            this.subscriptionProvider = subscriptionProvider;
 
             pieceMover = new PieceMover();
             movesSequenceTranslator = new MoveSequenceTranslator();
@@ -141,7 +144,28 @@ namespace Chess.WebUI.ViewModels
         {
             gameId = initialiseGameId;
 
-            await moveNotifier.SubscribeFromStartAsync(gameId, OnPieceMoved);
+            await InitialiseMovesAsync();
+            ToLastMove();
+
+            await SubscriberForNewMovesAsync();
+        }
+        private async Task InitialiseMovesAsync()
+        {
+            var movesResponse = await movementService.GetGameMovesAsync(gameId);
+
+            var moves = movesResponse
+                .Moves
+                .Select(m => m.AsDomain())
+                .Select(movesSequenceTranslator.TranslateNextMove);
+
+            movesReplayer.AddMoves(moves);
+        }
+
+        private async Task SubscriberForNewMovesAsync()
+        {
+            var subscriberFromSequence = movesReplayer.MovesLog.NextMoveSequenceNumber();
+
+            movesSubscriber = await subscriptionProvider.SubscribeAsync(gameId, subscriberFromSequence, OnPieceMoved);
         }
 
         private void OnPieceMoved(PieceMovedEvent pieceMovedEvent)
@@ -168,7 +192,7 @@ namespace Chess.WebUI.ViewModels
 
         public void Dispose()
         {
-            moveNotifier?.Dispose();
+            movesSubscriber?.Dispose();
         }
     }
 }

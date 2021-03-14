@@ -2,7 +2,7 @@
 
 namespace Chess.Data
 {
-    public interface IGameRepository
+    public interface IGamesRepository
     {
         Game GetGame(string gameId);
 

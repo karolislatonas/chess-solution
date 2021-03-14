@@ -27,6 +27,16 @@ namespace Chess.Data.InMemory
                 .ToArray();
         }
 
+        public PieceMove[] GetMovesFromSequence(string gameId, int fromSequenceNumber)
+        {
+            return moves
+                .Where(m => m.gameId == gameId)
+                .Select(m => m.move)
+                .OrderBy(m => m.SequenceNumber)
+                .Where(m => m.SequenceNumber >= fromSequenceNumber)
+                .ToArray();
+        }
+
         public PieceMove GetMove(string gameId, int sequenceNumber)
         {
             return moves
