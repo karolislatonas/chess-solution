@@ -1,4 +1,5 @@
 ﻿using Chess.Domain;
+using Chess.Domain.Movement;
 using Chess.Domain.Pieces;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -8,10 +9,7 @@ namespace Chess.WebUI.Components
     public partial class PieceView
     {
         [Parameter]
-        public int Row { get; set; }
-
-        [Parameter]
-        public int Column { get; set; }
+        public Location Location { get; set; }
 
         [Parameter]
         public IPiece Piece { get; set; }

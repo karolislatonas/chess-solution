@@ -5,7 +5,7 @@ namespace Chess.Domain
 {
     public class BoardDetails
     {
-        private readonly IReadOnlyDictionary<int, string> ColumnNames = new Dictionary<int, string>()
+        private static readonly IReadOnlyDictionary<int, string> ColumnNames = new Dictionary<int, string>()
         {
             [1] = "a",
             [2] = "b",
@@ -17,7 +17,7 @@ namespace Chess.Domain
             [8] = "h",
         };
 
-        private readonly IReadOnlyDictionary<int, string> RowNames = new Dictionary<int, string>()
+        private static readonly IReadOnlyDictionary<int, string> RowNames = new Dictionary<int, string>()
         {
             [1] = "1",
             [2] = "2",
@@ -28,6 +28,10 @@ namespace Chess.Domain
             [7] = "7",
             [8] = "8",
         };
+
+        public int TotalRows => RowNames.Count;
+
+        public int TotalColumns => ColumnNames.Count;
 
         public string GetColumnName(int column)
         {

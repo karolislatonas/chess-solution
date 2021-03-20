@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Chess.Messages.Events;
 using Chess.Api.Client.Subscription.Subscribers;
 using Chess.WebUI.Translations;
+using Chess.Domain.Extensions;
 
 namespace Chess.WebUI.ViewModels
 {
@@ -23,9 +24,10 @@ namespace Chess.WebUI.ViewModels
         private readonly MovesReplayer movesReplayer;
         private readonly TurnsTracker turnsTracker;
         private readonly MoveSequenceTranslator movesSequenceTranslator;
-
+        
         private string gameId;
         private ISubscriber movesSubscriber;
+        private ChessColor viewPerspective;
 
         public event Action OnStateChanged;
 
@@ -33,6 +35,8 @@ namespace Chess.WebUI.ViewModels
         {
             this.movementService = movementService;
             this.subscriptionProvider = subscriptionProvider;
+
+            viewPerspective = ChessColor.White;
 
             pieceMover = new PieceMover();
             movesSequenceTranslator = new MoveSequenceTranslator();
@@ -50,17 +54,29 @@ namespace Chess.WebUI.ViewModels
 
         public IPiece GetPieceAt(Location location) => movesReplayer.Board.GetPieceAt(location);
 
-        public void SelectPieceAt(int column, int row)
+        public Location GetLocationAtIndex(int columnNumber, int rowNumber)
         {
-            var from = new Location(column, row);
+            if (viewPerspective == ChessColor.Black)
+            {
+                var columnFromBlack = BoardDetails.TotalColumns - columnNumber + 1;
+                var rowFromBlack = BoardDetails.TotalRows - rowNumber + 1;
+
+                return new Location(columnFromBlack, rowFromBlack);
+            }
+
+            return new Location(columnNumber, rowNumber);
+        }
+
+        public void SelectPieceAt(Location location)
+        {
             var board = movesReplayer.Board;
-            var piece = board.GetPieceAt(from);
+            var piece = board.GetPieceAt(location);
 
             var availableMoves = turnsTracker.IsTurnFor(piece.Color) ?
-                pieceMover.GetAvailableMoves(board, movesReplayer.MovesLog, from) :
+                pieceMover.GetAvailableMoves(board, movesReplayer.MovesLog, location) :
                 new IMove[0];
                 
-            SelectedPiece = new PieceSelection(from, piece, availableMoves);
+            SelectedPiece = new PieceSelection(location, piece, availableMoves);
         }
 
         public void ClearPieceSelection()
@@ -140,6 +156,11 @@ namespace Chess.WebUI.ViewModels
             await movementService.MovePieceAsync(gameId, pieceMove);
         }
 
+        public void SwitchViewPerspective()
+        {
+            viewPerspective = viewPerspective.GetOpposite();
+        }
+
         public async Task InitialiseAsync(string initialiseGameId)
         {
             gameId = initialiseGameId;
@@ -149,6 +170,7 @@ namespace Chess.WebUI.ViewModels
 
             await SubscriberForNewMovesAsync();
         }
+
         private async Task InitialiseMovesAsync()
         {
             var movesResponse = await movementService.GetGameMovesAsync(gameId);

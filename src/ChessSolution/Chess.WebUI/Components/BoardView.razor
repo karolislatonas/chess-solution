@@ -1,49 +1,56 @@
 ﻿@using Domain.Movement;
 
-<div class="board">
-    @for (var row = 8; row >= 1; row--)
-    {
-        <div class="row @(row.IsEven() ? "row-even" : "row-odd")">
-            @for (var column = 1; column <= 8; column++)
-            {
-                var location = new Location(column, row);
-                var piece = BoardViewModel.GetPieceAt(location);
+<div class="board-container">
+    <div class="board">
+        @for (var rowNumber = 8; rowNumber >= 1; rowNumber--)
+        {
+            <div class="row @(rowNumber.IsEven() ? "row-even" : "row-odd")">
+                @for (var columnNumber = 1; columnNumber <= 8; columnNumber++)
+                {
+                    var location = BoardViewModel.GetLocationAtIndex(columnNumber, rowNumber);
+                    var piece = BoardViewModel.GetPieceAt(location);
 
-                <div class="cell"
-                     ondragover="event.preventDefault();"
-                     @ondrop="() => OnDropAsync(location)">
+                    <div class="cell"
+                         ondragover="event.preventDefault();"
+                         @ondrop="() => OnDropAsync(location)">
 
-                    @if(BoardViewModel.BelongsToCurrentMove(location))
-                    {
-                        <div class="cell-current-move"></div>
-                    }
+                        @if (BoardViewModel.BelongsToCurrentMove(location))
+                        {
+                            <div class="cell-current-move"></div>
+                        }
 
-                    @if (piece != null)
-                    {
-                        <PieceView Row="@row"
-                                   Column="@column"
-                                   Piece="@piece"
-                                   OnDragStarted="@OnPieceDragStarted"
-                                   OnDragEnded="@OnPieceDragEnded" />
-                    }
+                        @if (piece != null)
+                        {
+                            <PieceView Location="@location"
+                                       Piece="@piece"
+                                       OnDragStarted="@OnPieceDragStarted"
+                                       OnDragEnded="@OnPieceDragEnded" />
+                        }
 
-                    @if (BoardViewModel.SelectedPiece != null &&
-                      BoardViewModel.SelectedPiece.CanMoveTo(location))
-                    {
-                        <div class="available-move-marker"></div>
-                    }
+                        @if (BoardViewModel.SelectedPiece != null &&
+                         BoardViewModel.SelectedPiece.CanMoveTo(location))
+                        {
+                            <div class="available-move-marker"></div>
+                        }
 
-                    @if(column == 1)
-                    {
-                        <div class="notation notation-row" >@BoardViewModel.BoardDetails.GetRowName(row)</div>
-                    }
-                    @if(row == 1)
-                    {
-                        <div class="notation notation-column" >@BoardViewModel.BoardDetails.GetColumnName(column)</div>
-                    }
+                        @if (columnNumber == 1)
+                        {
+                            <div class="notation notation-row">@BoardViewModel.BoardDetails.GetRowName(location.Row)</div>
+                        }
+                        @if (rowNumber == 1)
+                        {
+                            <div class="notation notation-column">@BoardViewModel.BoardDetails.GetColumnName(location.Column)</div>
+                        }
 
-                </div>
-            }
-        </div>
-    }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    <button class="switch-persepctive-button"
+            @onclick="BoardViewModel.SwitchViewPerspective">
+        <div class="fa fa-arrow-up"></div>
+        <div class="fa fa-arrow-down"></div>
+    </button>
 </div>

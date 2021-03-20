@@ -21,7 +21,7 @@ namespace Chess.WebUI.Components
 
         public void OnPieceDragStarted(PieceView piece)
         {
-            BoardViewModel.SelectPieceAt(piece.Column, piece.Row);
+            BoardViewModel.SelectPieceAt(piece.Location);
             StateHasChanged();
         }
 
