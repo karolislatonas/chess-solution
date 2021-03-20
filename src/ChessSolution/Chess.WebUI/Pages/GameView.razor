@@ -4,7 +4,9 @@
 
 <div class="game-container">
 
-    <BoardView GameId="@GameId" BoardViewModel="@BoardViewModel" />
+    <div class="boardview-container">
+        <BoardView GameId="@GameId" BoardViewModel="@BoardViewModel" />
+    </div>
 
     <MovesView BoardViewModel="@BoardViewModel" />
 
