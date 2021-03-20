@@ -72,10 +72,10 @@ namespace Chess.Domain.Movement.Movers
 
         private IMove CreateMove(Location from, Location to)
         {
-            IMove move = new TakeMove(from, to);
+            var move = new TakeMove(from, to);
 
             if (IsPromotionMove(to))
-                move = new PromotionMoveWrapper(move);
+                return new PromotionMoveWrapper(move);
 
             return move;
         }
