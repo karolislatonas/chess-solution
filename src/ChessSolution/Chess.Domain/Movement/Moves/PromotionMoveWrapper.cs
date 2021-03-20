@@ -2,7 +2,7 @@
 
 namespace Chess.Domain.Movement.Moves
 {
-    public class PromotionMoveWrapper : MoveBase
+    public class PromotionMoveWrapper : IMove
     {
         private readonly IMove innerMove;
 
@@ -18,13 +18,16 @@ namespace Chess.Domain.Movement.Moves
             
         }
 
-        private PromotionMoveWrapper(IMove innerMove) : 
-            base(innerMove.From, innerMove.To)
+        private PromotionMoveWrapper(IMove innerMove)
         {
             this.innerMove = innerMove;
         }
 
-        public override void ApplyChanges(Board board)
+        public Location From => innerMove.From;
+
+        public Location To => innerMove.To;
+
+        public void ApplyChanges(Board board)
         {
             innerMove.ApplyChanges(board);
 
