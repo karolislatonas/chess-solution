@@ -11,7 +11,6 @@ namespace Chess.Api.Client.Subscription.Subscribers
     {
         private readonly HubConnection connection;
         private readonly Action<PieceMovedEvent> pieceMovedHandler;
-        private readonly BlockingCollection<PieceMovedEvent> blockingCollection;
 
         public SignalRMovesSubscriber(
             HubConnection connection, 
@@ -19,34 +18,12 @@ namespace Chess.Api.Client.Subscription.Subscribers
         {
             this.connection = connection;
             this.pieceMovedHandler = pieceMovedHandler;
-            blockingCollection = new BlockingCollection<PieceMovedEvent>(new ConcurrentQueue<PieceMovedEvent>());
 
-            blockingCollection.Add(new PieceMovedEvent());
-
-            Task.Factory.StartNew(ConsumingTask, TaskCreationOptions.LongRunning);
-
-            connection.On<PieceMovedEvent>(nameof(IMoveHubClient.OnPieceMoved), OnPieceMoved);
-        }
-
-        private void OnPieceMoved(PieceMovedEvent @event)
-        {
-            pieceMovedHandler(@event);
-
-            //blockingCollection.TryAdd(@event);
-            //var c = blockingCollection.Count;
-        }
-
-        private void ConsumingTask()
-        {
-            foreach (var @event in blockingCollection.GetConsumingEnumerable())
-            {
-                pieceMovedHandler(@event);
-            }
+            connection.On(nameof(IMoveHubClient.OnPieceMoved), pieceMovedHandler);
         }
 
         public async ValueTask DisposeAsync()
         {
-            blockingCollection.Dispose();
             await connection.DisposeAsync();
         }
     }
