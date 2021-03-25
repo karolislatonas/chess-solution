@@ -16,7 +16,7 @@ using Chess.Domain.Extensions;
 
 namespace Chess.WebUI.ViewModels
 {
-    public class BoardViewModel : IDisposable
+    public class BoardViewModel : IAsyncDisposable
     {
         private readonly MovementService movementService;
         private readonly ISubscriptionProvider subscriptionProvider;
@@ -74,7 +74,7 @@ namespace Chess.WebUI.ViewModels
 
             var availableMoves = turnsTracker.IsTurnFor(piece.Color) ?
                 pieceMover.GetAvailableMoves(board, movesReplayer.MovesLog, location) :
-                new IMove[0];
+                Array.Empty<IMove>();
                 
             SelectedPiece = new PieceSelection(location, piece, availableMoves);
         }
@@ -168,7 +168,7 @@ namespace Chess.WebUI.ViewModels
             await InitialiseMovesAsync();
             ToLastMove();
 
-            await SubscriberForNewMovesAsync();
+            await SubscribeForNewMovesAsync();
         }
 
         private async Task InitialiseMovesAsync()
@@ -183,7 +183,7 @@ namespace Chess.WebUI.ViewModels
             movesReplayer.AddMoves(moves);
         }
 
-        private async Task SubscriberForNewMovesAsync()
+        private async Task SubscribeForNewMovesAsync()
         {
             var subscriberFromSequence = movesReplayer.MovesLog.NextMoveSequenceNumber();
 
@@ -212,9 +212,12 @@ namespace Chess.WebUI.ViewModels
             OnStateChanged?.Invoke();
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            movesSubscriber?.Dispose();
+            var disposeTask = movesSubscriber?.DisposeAsync();
+
+            if (disposeTask.HasValue)
+                await disposeTask.Value;       
         }
     }
 }

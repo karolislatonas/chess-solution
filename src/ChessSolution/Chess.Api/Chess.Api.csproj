@@ -15,6 +15,7 @@
     <ProjectReference Include="..\Chess.Api.DataContracts\Chess.Api.DataContracts.csproj" />
     <ProjectReference Include="..\Chess.Data.InMemory\Chess.Data.InMemory.csproj" />
     <ProjectReference Include="..\Chess.Messaging\Chess.Messaging.csproj" />
+    <ProjectReference Include="..\Chess.SignalR.Typings\Chess.SignalR.Typings.csproj" />
     <ProjectReference Include="..\Chess.UseCases\Chess.UseCases.csproj" />
   </ItemGroup>
 

@@ -1,25 +1,37 @@
 ﻿using Chess.Messaging;
 using Chess.Messages.Events;
 using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
+using Chess.SignalR.Typings;
 
-namespace Chess.Api.Hubs
+namespace Chess.Api.Notification.Notifiers
 {
-    public class MovesSubscriber : ISubscriber
+    public class MovesNotifier : INotifier
     {
         private readonly string gameId;
         private readonly IServiceBus serviceBus;
         private readonly IClientProxy clientProxy;
 
-        public MovesSubscriber(string gameId, IServiceBus serviceBus, IClientProxy clientProxy)
+        public MovesNotifier(string gameId, IServiceBus serviceBus, IClientProxy clientProxy)
         {
             this.gameId = gameId;
             this.serviceBus = serviceBus;
             this.clientProxy = clientProxy;
-            
+        }
+
+        Task INotifier.StartAsync()
+        {
+            Start();
+
+            return Task.CompletedTask;
+        }
+
+        public void Start()
+        {
             serviceBus.Subscribe<PieceMovedEvent>(this, OnPieceMoved);
         }
 
-        public void Unsubscribe()
+        public void Dispose()
         {
             serviceBus.Unsubscribe<PieceMovedEvent>(this, OnPieceMoved);
         }
@@ -29,7 +41,7 @@ namespace Chess.Api.Hubs
             if (pieceMovedEvent.GameId != gameId)
                 return;
 
-            await clientProxy.SendAsync("OnPieceMoved", pieceMovedEvent);
+            await clientProxy.SendAsync(nameof(IMoveHubClient.OnPieceMoved), pieceMovedEvent);
         }
     }
 }

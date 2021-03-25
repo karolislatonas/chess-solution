@@ -1,8 +1,8 @@
 ﻿using Chess.Api.Client.Subscription.Subscribers;
 using Chess.Messages.Events;
+using Chess.SignalR.Typings;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Chess.Api.Client.Subscription
@@ -21,9 +21,9 @@ namespace Chess.Api.Client.Subscription
             var connection = CreateConnection();
             await connection.StartAsync();
 
-            var subscriber = new SignalRMoveSubscriber(connection, handler);
+            var subscriber = new SignalRMovesSubscriber(connection, handler);
 
-            await connection.SendAsync("SubscribeToMoves", gameId);
+            await connection.SendAsync(nameof(IMoveHub.SubscribeToMoves), gameId);
 
             return subscriber;
         }
@@ -33,9 +33,9 @@ namespace Chess.Api.Client.Subscription
             var connection = CreateConnection();
             await connection.StartAsync();
 
-            var subscriber = new SignalRMoveSubscriber(connection, handler);
+            var subscriber = new SignalRMovesSubscriber(connection, handler);
 
-            await connection.SendAsync("SubscribeToMovesFrom", gameId, fromSequenceNumber);
+            await connection.SendAsync(nameof(IMoveHub.SubscribeToMovesFrom), gameId, fromSequenceNumber);
 
             return subscriber;
         }

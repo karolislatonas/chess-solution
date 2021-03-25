@@ -2,14 +2,15 @@
 using Chess.Messages;
 using Chess.Messages.Events;
 using Chess.Messaging;
+using Chess.SignalR.Typings;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Chess.Api.Hubs
+namespace Chess.Api.Notification.Notifiers
 {
-    public class MovesSubcriberFrom : ISubscriber
+    public class MovesFromNotifier : INotifier
     {
         private readonly string gameId;
         private readonly int fromSequenceNumber;
@@ -17,7 +18,7 @@ namespace Chess.Api.Hubs
         private readonly IClientProxy clientProxy;
         private readonly IMovesRepository movesRepository;
 
-        public MovesSubcriberFrom(string gameId, int fromSequenceNumber, IServiceBus serviceBus, IMovesRepository movesRepository, IClientProxy clientProxy)
+        public MovesFromNotifier(string gameId, int fromSequenceNumber, IServiceBus serviceBus, IMovesRepository movesRepository, IClientProxy clientProxy)
         {
             this.gameId = gameId;
             this.fromSequenceNumber = fromSequenceNumber;
@@ -32,24 +33,11 @@ namespace Chess.Api.Hubs
             serviceBus.Subscribe<PieceMovedEvent>(this, queue.Enqueue);
 
             var lastSequenceNumberPublished = await PublishSavedEvents();
-
-            while (queue.TryDequeue(out var movedEvent))
-            {
-                if (movedEvent.SequenceNumber <= lastSequenceNumberPublished)
-                    continue;
-
-                await OnPieceMovedAsync(movedEvent);
-                lastSequenceNumberPublished = movedEvent.SequenceNumber;
-            }
+            
+            await PublishedReceivedEvents(queue, lastSequenceNumberPublished);
 
             serviceBus.Subscribe<PieceMovedEvent>(this, OnPieceMoved);
             serviceBus.Unsubscribe<PieceMovedEvent>(this, queue.Enqueue);
-            
-        }
-
-        public void Unsubscribe()
-        {
-            serviceBus.Unsubscribe<PieceMovedEvent>(this, OnPieceMoved);
         }
 
         private async void OnPieceMoved(PieceMovedEvent pieceMovedEvent)
@@ -62,7 +50,7 @@ namespace Chess.Api.Hubs
             if (pieceMovedEvent.GameId != gameId)
                 return;
 
-            await clientProxy.SendAsync("OnPieceMoved", pieceMovedEvent);
+            await clientProxy.SendAsync(nameof(IMoveHubClient.OnPieceMoved), pieceMovedEvent);
         }
 
         private async Task<int?> PublishSavedEvents()
@@ -86,6 +74,25 @@ namespace Chess.Api.Hubs
             }
 
             return lastSequenceNumberPublished;
+        }
+
+        private async Task PublishedReceivedEvents(ConcurrentQueue<PieceMovedEvent> queue, int? fromSequence)
+        {
+            var lastSequenceNumberPublished = fromSequence;
+
+            while (queue.TryDequeue(out var movedEvent))
+            {
+                if (movedEvent.SequenceNumber <= lastSequenceNumberPublished)
+                    continue;
+
+                await OnPieceMovedAsync(movedEvent);
+                lastSequenceNumberPublished = movedEvent.SequenceNumber;
+            }
+        }
+
+        public void Dispose()
+        {
+            serviceBus.Unsubscribe<PieceMovedEvent>(this, OnPieceMoved);
         }
     }
 }

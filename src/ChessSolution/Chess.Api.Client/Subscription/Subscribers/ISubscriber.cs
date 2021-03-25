@@ -2,7 +2,7 @@
 
 namespace Chess.Api.Client.Subscription.Subscribers
 {
-    public interface ISubscriber : IDisposable
+    public interface ISubscriber : IAsyncDisposable
     {
         
     }

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Chess.Api.DataContracts\Chess.Api.DataContracts.csproj" />
     <ProjectReference Include="..\Chess.Messages\Chess.Messages.csproj" />
+    <ProjectReference Include="..\Chess.SignalR.Typings\Chess.SignalR.Typings.csproj" />
   </ItemGroup>
 
 </Project>
