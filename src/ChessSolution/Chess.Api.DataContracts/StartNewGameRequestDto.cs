@@ -4,6 +4,6 @@
     {
         public string WhitePlayerId { get; set; }
 
-        public string BlakcPlayerId { get; set; }
+        public string BlackPlayerId { get; set; }
     }
 }

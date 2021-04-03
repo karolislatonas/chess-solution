@@ -1,4 +1,5 @@
 ﻿using Chess.Api.Client;
+using System;
 using System.Threading.Tasks;
 
 namespace Chess.WebUI.ViewModels
@@ -14,7 +15,10 @@ namespace Chess.WebUI.ViewModels
 
         public async Task<string> StartNewGameAsync()
         {
-            return await gameService.StartNewGameAsync();
+            var whitePlayerId = Guid.NewGuid().ToString();
+            var blackPlayerId = Guid.NewGuid().ToString();
+
+            return await gameService.StartNewGameAsync(whitePlayerId, blackPlayerId);
         }
     }
 }

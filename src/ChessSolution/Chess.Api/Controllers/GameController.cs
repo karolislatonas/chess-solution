@@ -34,7 +34,7 @@ namespace Chess.Api.Controllers
 
             var startNewGameCommand = new StartNewGameCommand()
             {
-                BlackPlayerId = startNewGameRequest.BlakcPlayerId,
+                BlackPlayerId = startNewGameRequest.BlackPlayerId,
                 WhitePlayerId = startNewGameRequest.WhitePlayerId
             };
 
