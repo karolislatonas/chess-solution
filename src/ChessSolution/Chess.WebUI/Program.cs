@@ -30,7 +30,7 @@ namespace Chess.WebUI
 
         private static ISubscriptionProvider CreateSubsriptionProvider(IServiceProvider arg)
         {
-            return new SignalRSubscribtionProvider("http://localhost:6001/movehub");
+            return new SignalRSubscribtionProvider("http://localhost:6001/gamehub");
         }
     }
 }

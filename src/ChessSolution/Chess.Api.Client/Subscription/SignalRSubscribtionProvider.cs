@@ -16,26 +16,16 @@ namespace Chess.Api.Client.Subscription
             this.url = url;
         }
 
-        public async Task<ISubscriber> SubscribeAsync(string gameId, Action<PieceMovedEvent> handler)
+        public async Task<ISubscriber> SubscribeAsync(string gameId, int fromSequenceNumber, 
+            Action<PieceMovedEvent> moveHandler, 
+            Action<GameFinishedEvent> gameFinishedHandler)
         {
             var connection = CreateConnection();
             await connection.StartAsync();
 
-            var subscriber = new SignalRMovesSubscriber(connection, handler);
+            var subscriber = new SignalRGameSubscriber(connection, moveHandler, gameFinishedHandler);
 
-            await connection.SendAsync(nameof(IMoveHub.SubscribeToMoves), gameId);
-
-            return subscriber;
-        }
-
-        public async Task<ISubscriber> SubscribeAsync(string gameId, int fromSequenceNumber, Action<PieceMovedEvent> handler)
-        {
-            var connection = CreateConnection();
-            await connection.StartAsync();
-
-            var subscriber = new SignalRMovesSubscriber(connection, handler);
-
-            await connection.SendAsync(nameof(IMoveHub.SubscribeToMovesFrom), gameId, fromSequenceNumber);
+            await connection.SendAsync(nameof(IGameHub.SubscribeToGameEvents), gameId, fromSequenceNumber);
 
             return subscriber;
         }

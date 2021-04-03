@@ -2,24 +2,25 @@
 using Chess.SignalR.Typings;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
 
 namespace Chess.Api.Client.Subscription.Subscribers
 {
-    public class SignalRMovesSubscriber : ISubscriber
+    public class SignalRGameSubscriber : ISubscriber
     {
         private readonly HubConnection connection;
         private readonly Action<PieceMovedEvent> pieceMovedHandler;
 
-        public SignalRMovesSubscriber(
+        public SignalRGameSubscriber(
             HubConnection connection, 
-            Action<PieceMovedEvent> pieceMovedHandler)
+            Action<PieceMovedEvent> pieceMovedHandler,
+            Action<GameFinishedEvent> gameFinishedHandler)
         {
             this.connection = connection;
             this.pieceMovedHandler = pieceMovedHandler;
 
-            connection.On(nameof(IMoveHubClient.OnPieceMoved), pieceMovedHandler);
+            connection.On(nameof(IGameHubClient.OnPieceMoved), pieceMovedHandler);
+            connection.On(nameof(IGameHubClient.OnGameFinished), gameFinishedHandler);
         }
 
         public async ValueTask DisposeAsync()

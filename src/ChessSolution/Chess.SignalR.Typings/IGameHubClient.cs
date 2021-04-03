@@ -2,8 +2,10 @@
 
 namespace Chess.SignalR.Typings
 {
-    public interface IMoveHubClient
+    public interface IGameHubClient
     {
         void OnPieceMoved(PieceMovedEvent @event);
+
+        void OnGameFinished(GameFinishedEvent @event);
     }
 }

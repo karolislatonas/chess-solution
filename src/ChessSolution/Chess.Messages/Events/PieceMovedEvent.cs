@@ -1,6 +1,6 @@
 ﻿namespace Chess.Messages.Events
 {
-    public class PieceMovedEvent
+    public class PieceMovedEvent : IGameEvent
     {
         public string GameId { get; set; }
 

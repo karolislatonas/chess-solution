@@ -22,18 +22,13 @@ namespace Chess.Api.Notification
             this.client = client;
         }
 
-        public void SubscribeToMoves(string gameId)
+        public void SubscribeToEvents(string gameId, int fromSequenceNumber)
         {
-            var notifier = new MovesNotifier(gameId, serviceBus, client);
+            var movesSubscriber = new MovesNotifier(gameId, fromSequenceNumber, serviceBus, movesRepository, client);
+            var gameFinishedSubscriber = new GameNotifier(gameId, serviceBus, client);
 
-            HandleNewNotifier(notifier);
-        }
-
-        public void SubscribeToMovesFrom(string gameId, int fromSequenceNumber)
-        {
-            var subscriber = new MovesFromNotifier(gameId, fromSequenceNumber, serviceBus, movesRepository, client);
-
-            HandleNewNotifier(subscriber);
+            HandleNewNotifier(movesSubscriber);
+            HandleNewNotifier(gameFinishedSubscriber);
         }
 
         public void Dispose()

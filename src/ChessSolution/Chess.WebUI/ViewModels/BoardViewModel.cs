@@ -208,7 +208,7 @@ namespace Chess.WebUI.ViewModels
         {
             var subscriberFromSequence = movesReplayer.MovesLog.NextMoveSequenceNumber();
 
-            movesSubscriber = await subscriptionProvider.SubscribeAsync(gameId, subscriberFromSequence, OnPieceMoved);
+            movesSubscriber = await subscriptionProvider.SubscribeAsync(gameId, subscriberFromSequence, OnPieceMoved, OnGameFinished);
         }
 
         private void OnPieceMoved(PieceMovedEvent pieceMovedEvent)
@@ -225,6 +225,11 @@ namespace Chess.WebUI.ViewModels
             if(shouldUpdateToLatest)
                 movesReplayer.ToLastMove();
 
+            NotifyStateChanged();
+        }
+
+        private void OnGameFinished(GameFinishedEvent gameFinishedEvent)
+        {
             NotifyStateChanged();
         }
 

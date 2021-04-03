@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace Chess.Api.Hubs
 {
-    public class MoveHub : Hub, IMoveHub
+    public class GameHub : Hub, IGameHub
     {
         private readonly IServiceBus serviceBus;
         private readonly IMovesRepository movesRepository;
 
-        public MoveHub(IServiceBus serviceBus, IMovesRepository movesRepository)
+        public GameHub(IServiceBus serviceBus, IMovesRepository movesRepository)
         {
             this.serviceBus = serviceBus;
             this.movesRepository = movesRepository;
@@ -33,18 +33,11 @@ namespace Chess.Api.Hubs
             await Task.CompletedTask;
         }
 
-        public void SubscribeToMoves(string gameId)
+        public void SubscribeToGameEvents(string gameId, int fromSequenceNumber)
         {
             var notificationHandler = GetNotificationHandler();
 
-            notificationHandler.SubscribeToMoves(gameId);
-        }
-
-        public void SubscribeToMovesFrom(string gameId, int fromSequenceNumber)
-        {
-            var notificationHandler = GetNotificationHandler();
-
-            notificationHandler.SubscribeToMovesFrom(gameId, fromSequenceNumber);
+            notificationHandler.SubscribeToEvents(gameId, fromSequenceNumber);
         }
 
         private void AddNotificationHandlerForNewConnection()
