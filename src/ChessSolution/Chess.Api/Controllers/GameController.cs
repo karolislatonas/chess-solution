@@ -2,6 +2,7 @@
 using Chess.Api.Translators;
 using Chess.Data;
 using Chess.Messages.Commands;
+using Chess.Messaging;
 using Chess.UseCases;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +13,12 @@ namespace Chess.Api.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGamesRepository gameRepository;
+        private readonly IServiceBus serviceBus;
 
-        public GameController(IGamesRepository gameRepository)
+        public GameController(IGamesRepository gameRepository, IServiceBus serviceBus)
         {
             this.gameRepository = gameRepository;
+            this.serviceBus = serviceBus;
         }
 
         [HttpGet("{gameId}")]
@@ -25,11 +28,17 @@ namespace Chess.Api.Controllers
         }
 
         [HttpPost()]
-        public IActionResult StartGame()
+        public IActionResult StartGame(StartNewGameRequestDto startNewGameRequest)
         {
-            var startGameCommandHandler = new StartGameCommanHandler(gameRepository);
+            var startNewGameCommandHandler = new StartNewGameCommandHandler(gameRepository);
 
-            var newGameId = startGameCommandHandler.ExecuteCommand(new StartNewGameCommand());
+            var startNewGameCommand = new StartNewGameCommand()
+            {
+                BlackPlayerId = startNewGameRequest.BlakcPlayerId,
+                WhitePlayerId = startNewGameRequest.WhitePlayerId
+            };
+
+            var newGameId = startNewGameCommandHandler.ExecuteCommand(new StartNewGameCommand());
 
             return CreatedAtAction(
                 nameof(GetGame),
@@ -37,7 +46,23 @@ namespace Chess.Api.Controllers
                 FindGame(newGameId));
         }
 
-        private GameDto FindGame(string gameId)
+        [HttpPost("{gameId}/resign")]
+        public IActionResult Resign(string gameId, [FromQuery] string playerId)
+        {
+            var resignGameCommandHandler = new ResignGameCommandHandler(gameRepository, serviceBus);
+
+            var command = new ResignGameCommand
+            {
+                GameId = gameId,
+                PlayerId = playerId
+            };
+
+            resignGameCommandHandler.ExecuteCommand(command);
+
+            return NoContent();
+        }
+
+        private GameResponseDto FindGame(string gameId)
         {
             return gameRepository.GetGame(gameId).AsDataContract();
         }

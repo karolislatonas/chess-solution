@@ -21,17 +21,17 @@ namespace Chess.Api.Client
             var response = await client.PostAsync("", null);
             response.EnsureSuccessStatusCode();
 
-            var game = await response.Content.ReadFromJsonAsync<GameDto>();
+            var game = await response.Content.ReadFromJsonAsync<GameResponseDto>();
 
             return game.GameId;
         }
 
-        public async Task<GameDto> GetGameAsync(string gameId)
+        public async Task<GameResponseDto> GetGameAsync(string gameId)
         {
             var response = await client.GetAsync($"{gameId}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<GameDto>();
+            return await response.Content.ReadFromJsonAsync<GameResponseDto>();
         }
 
 

@@ -1,7 +1,6 @@
 ﻿using Chess.Data;
 using Chess.Domain;
 using Chess.Domain.Movement;
-using Chess.Domain.Movement.Moves;
 using Chess.Messages.Commands;
 using Chess.Messages.Events;
 using Chess.Messaging;
@@ -13,19 +12,24 @@ namespace Chess.UseCases
 {
     public class MovePieceCommandHandler : CommandHandlerBase<MovePieceCommand, int>
     {
+        private readonly IGamesRepository gamesRepository;
         private readonly IMovesRepository movesRepository;
         private readonly IServiceBus serviceBus;
 
-        public MovePieceCommandHandler(IMovesRepository movesRepository, IServiceBus serviceBus)
+        public MovePieceCommandHandler(IGamesRepository gamesRepository, IMovesRepository movesRepository, IServiceBus serviceBus)
         {
+            this.gamesRepository = gamesRepository;
             this.movesRepository = movesRepository;
             this.serviceBus = serviceBus;
         }
 
         public override int ExecuteCommand(MovePieceCommand command)
         {
-            var movesLog = GetMovesLog(command.GameId);
+            var game = gamesRepository.GetGame(command.GameId);
 
+            EnsureGameNotFinished(game);
+    
+            var movesLog = GetMovesLog(command.GameId);
             var board = CreateBoard(movesLog);
 
             var from = command.From.AsDomain();
@@ -40,6 +44,12 @@ namespace Chess.UseCases
             PublishPieceMovedEvent(command.GameId, pieceMove);
 
             return movesLog.NextMoveSequenceNumber();
+        }
+
+        private void EnsureGameNotFinished(Game game)
+        {
+            if (game.IsFinished)
+                throw new Exception("Cannot move pieces in finished game.");
         }
 
         private void SaveMove(string gameId, PieceMove pieceMove)

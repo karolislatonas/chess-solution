@@ -12,11 +12,13 @@ namespace Chess.Api.Controllers
     [Route("api/game/{gameId}/moves")]
     public class MoveController : ControllerBase
     {
+        private readonly IGamesRepository gamesRepository;
         private readonly IMovesRepository moveRepository;
         private readonly IServiceBus serviceBus;
 
-        public MoveController(IMovesRepository moveRepository, IServiceBus serviceBus)
+        public MoveController(IGamesRepository gamesRepository, IMovesRepository moveRepository, IServiceBus serviceBus)
         {
+            this.gamesRepository = gamesRepository;
             this.moveRepository = moveRepository;
             this.serviceBus = serviceBus;
         }
@@ -46,7 +48,7 @@ namespace Chess.Api.Controllers
         {
             var command = movePieceRequest.AsCommand(gameId);
 
-            var commandHandler = new MovePieceCommandHandler(moveRepository, serviceBus);
+            var commandHandler = new MovePieceCommandHandler(gamesRepository, moveRepository, serviceBus);
 
             var moveSequenceNumber = commandHandler.ExecuteCommand(command);
 

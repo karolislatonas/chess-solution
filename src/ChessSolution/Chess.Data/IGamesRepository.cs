@@ -6,6 +6,8 @@ namespace Chess.Data
     {
         Game GetGame(string gameId);
 
+        void UpdateGame(Game game);
+
         void AddGame(Game game);
     }
 }

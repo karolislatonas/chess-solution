@@ -16,11 +16,13 @@ namespace Chess.Api.Translators
             };
         }
 
-        public static GameDto AsDataContract(this Game game)
+        public static GameResponseDto AsDataContract(this Game game)
         {
-            return new GameDto
+            return new GameResponseDto
             {
-                GameId = game.GameId
+                GameId = game.GameId,
+                WhitePlayerId = game.WhitePlayerId,
+                BlakcPlayerId = game.BlackPlayerId
             };
         }
 

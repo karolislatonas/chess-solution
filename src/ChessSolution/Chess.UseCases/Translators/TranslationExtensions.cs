@@ -1,5 +1,6 @@
 ﻿using Chess.Domain.Movement;
 using Chess.Messages;
+using System;
 
 namespace Chess.UseCases.Translators
 {
@@ -16,6 +17,18 @@ namespace Chess.UseCases.Translators
             {
                 Column = location.Column,
                 Row = location.Row
+            };
+        }
+
+        public static GameResult AsMessage(this Domain.GameResult gameResult)
+        {
+            return gameResult switch
+            {
+                Domain.GameResult.Draw => GameResult.Draw,
+                Domain.GameResult.WonByBlack => GameResult.WonByBlack,
+                Domain.GameResult.WonByWhite => GameResult.WonByWhite,
+
+                _ => throw new Exception()
             };
         }
     }

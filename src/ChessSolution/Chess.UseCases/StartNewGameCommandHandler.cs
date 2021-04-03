@@ -5,11 +5,11 @@ using System;
 
 namespace Chess.UseCases
 {
-    public class StartGameCommanHandler : CommandHandlerBase<StartNewGameCommand, string>
+    public class StartNewGameCommandHandler : CommandHandlerBase<StartNewGameCommand, string>
     {
         private readonly IGamesRepository gameRepository;
 
-        public StartGameCommanHandler(IGamesRepository gameRepository)
+        public StartNewGameCommandHandler(IGamesRepository gameRepository)
         {
             this.gameRepository = gameRepository;
         }
@@ -18,7 +18,7 @@ namespace Chess.UseCases
         {
             var newGameId = Guid.NewGuid().ToString();
 
-            var newGame = new Game(newGameId);
+            var newGame = new Game(newGameId, command.WhitePlayerId, command.BlackPlayerId);
 
             gameRepository.AddGame(newGame);
 
