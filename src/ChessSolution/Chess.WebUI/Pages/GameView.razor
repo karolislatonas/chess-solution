@@ -4,17 +4,33 @@
 
 <div class="game-container">
 
-    <div class="boardview-container">
-        <BoardView GameId="@GameId" BoardViewModel="@BoardViewModel" />
+    <div style="position:relative">
+        <div class="boardview-container">
+            <BoardView GameId="@GameId" BoardViewModel="@BoardViewModel" />
+        </div>
+
+        @if (BoardViewModel.IsGameFinished)
+        {
+            <div class="game-result-pop-up">
+                <GameResultView GameResult="@BoardViewModel.Result.Value" />
+            </div>
+        }
+    </div>
+
+    <div class="switch-perspective-container" >
+        <button @onclick="BoardViewModel.SwitchViewPerspective">
+            <div class="fa fa-arrow-up"></div>
+            <div class="fa fa-arrow-down"></div>
+        </button>
     </div>
 
     <div class="game-controls-container">
-        <div style="height:100%">
+        <div class="moves-container">
             <MovesView BoardViewModel="@BoardViewModel" />
         </div>
-        <div class="game-controls">
-            <button @onclick="@BoardViewModel.Resign" >Resign</button>
+        <div class="game-controls @(BoardViewModel.IsGameFinished ? "game-controls-hidden" : "")">
             <button>Draw</button>
+            <button @onclick="@BoardViewModel.Resign">Resign</button>
         </div>
     </div>
 </div>

@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Shared", "Chess.Share
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Messaging", "Chess.Messaging\Chess.Messaging.csproj", "{D444559F-5ABE-4AE7-8083-9BA8A8C5B6AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.SignalR.Typings", "Chess.SignalR.Typings\Chess.SignalR.Typings.csproj", "{6711DF66-24FD-4D38-ACAF-964D5A9CE8D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.SignalR.Typings", "Chess.SignalR.Typings\Chess.SignalR.Typings.csproj", "{6711DF66-24FD-4D38-ACAF-964D5A9CE8D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

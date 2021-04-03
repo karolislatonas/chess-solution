@@ -1,0 +1,35 @@
+﻿
+.game-result-view {
+    position: relative;
+    border-radius: 5px;
+    background-color: #666463;
+    padding: 5px;
+}
+
+.game-result-header {
+    display: flex;
+    width: 100%;
+    
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    font-weight: bold;
+    font-size: large;
+    color: white;
+
+    padding: 10px;
+}
+
+.game-result {
+    font-size: smaller;
+}
+
+.game-result-view-close {
+    position: absolute;
+    right: 0%;
+    top: 0%;
+    padding: 5px;
+    color: white;
+    cursor: pointer;
+}

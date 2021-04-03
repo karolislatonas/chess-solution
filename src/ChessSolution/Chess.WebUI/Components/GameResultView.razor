@@ -1,0 +1,19 @@
+﻿
+@if (WasClosed)
+    return;
+
+<div class="game-result-view">
+
+    <div class="game-result-view-close">
+        <div @onclick="Close"><i class="fa fa-times"></i></div>
+    </div>
+
+    <div class="game-result-header">
+        <div>Game Finished</div>
+        <div class="game-result">
+            @GameResult.ToString()
+        </div>
+    </div>
+</div>
+
+

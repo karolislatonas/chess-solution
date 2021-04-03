@@ -58,7 +58,7 @@
 }
 
 .game-container > div:nth-child(n+2) {
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .moves-container > div:nth-child(n+1) {

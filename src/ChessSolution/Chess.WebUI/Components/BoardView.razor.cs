@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess.WebUI.Components
 {
-    public partial class BoardView : IDisposable
+    public partial class BoardView
     {
         [Parameter]
         public string GameId { get; set; }
@@ -33,16 +33,6 @@ namespace Chess.WebUI.Components
         public async Task OnDropAsync(Location location)
         {
             await BoardViewModel.MoveSelectedPieceToAsync(location);
-        }
-
-        protected override void OnInitialized()
-        {
-            BoardViewModel.OnStateChanged += StateHasChanged;
-        }
-
-        public void Dispose()
-        {
-            BoardViewModel.OnStateChanged -= StateHasChanged;
         }
     }
 }

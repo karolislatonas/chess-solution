@@ -55,6 +55,10 @@ namespace Chess.WebUI.ViewModels
 
         public BoardDetails BoardDetails => movesReplayer.Board.BoardDetails;
 
+        public bool IsGameFinished => Result.HasValue;
+
+        public GameResult? Result { get; private set; }
+
         public IEnumerable<PieceMove> Moves => movesReplayer.MovesLog.Select(m => new PieceMove(m.SequenceNumber, m.Move.From, m.Move.To));
 
         public IPiece GetPieceAt(Location location) => movesReplayer.Board.GetPieceAt(location);
@@ -230,6 +234,8 @@ namespace Chess.WebUI.ViewModels
 
         private void OnGameFinished(GameFinishedEvent gameFinishedEvent)
         {
+            Result = gameFinishedEvent.Result.AsDomain();
+
             NotifyStateChanged();
         }
 
