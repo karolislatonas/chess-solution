@@ -38,7 +38,7 @@ namespace Chess.Api.Controllers
                 WhitePlayerId = startNewGameRequest.WhitePlayerId
             };
 
-            var newGameId = startNewGameCommandHandler.ExecuteCommand(new StartNewGameCommand());
+            var newGameId = startNewGameCommandHandler.ExecuteCommand(startNewGameCommand);
 
             return CreatedAtAction(
                 nameof(GetGame),

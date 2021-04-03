@@ -5,6 +5,7 @@ using System.Net.Http.Json;
 using Chess.Api.DataContracts;
 using System.Text.Json;
 using System.Text;
+using System.Web;
 
 namespace Chess.Api.Client
 {
@@ -15,7 +16,7 @@ namespace Chess.Api.Client
         public GameService(IHttpClientFactory factory)
         {
             client = factory.CreateClient();
-            client.BaseAddress = new Uri("http://localhost:6001/api/game");
+            client.BaseAddress = new Uri("http://localhost:6001/api/game/");
         }
 
         public async Task<string> StartNewGameAsync(string whitePlayerId, string blackPlayerId)
@@ -30,14 +31,20 @@ namespace Chess.Api.Client
             var response = await client.PostAsync("", jsonRequest);
             response.EnsureSuccessStatusCode();
 
-            var game = await response.Content.ReadFromJsonAsync<GameResponseDto>();
+            var gameResponse = await response.Content.ReadFromJsonAsync<GameResponseDto>();
 
-            return game.GameId;
+            return gameResponse.GameId;
+        }
+
+        public async Task Resign(string gameId, string playerId)
+        {
+            var response = await client.PostAsync($"{gameId}/resign?playerId={playerId}", null);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task<GameResponseDto> GetGameAsync(string gameId)
         {
-            var response = await client.GetAsync($"{gameId}");
+            var response = await client.GetAsync(gameId);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadFromJsonAsync<GameResponseDto>();

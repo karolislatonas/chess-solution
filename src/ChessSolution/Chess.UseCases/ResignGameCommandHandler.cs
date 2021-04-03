@@ -25,6 +25,8 @@ namespace Chess.UseCases
 
             var game = gamesRepository.GetGame(command.GameId);
 
+            EnsureGameNotFinished(game);
+
             game.ResignByPlayer(command.PlayerId);
 
             gamesRepository.UpdateGame(game);
@@ -45,8 +47,17 @@ namespace Chess.UseCases
 
         private void EnsureCommandIsValid(ResignGameCommand command)
         {
+            if (string.IsNullOrEmpty(command.GameId))
+                throw new Exception("Missing game id for player resign");
+
             if (string.IsNullOrEmpty(command.PlayerId))
-                throw new Exception(command.PlayerId);
+                throw new Exception("Missing resigning player id");
+        }
+
+        private void EnsureGameNotFinished(Game game)
+        {
+            if (game.IsFinished)
+                throw new Exception("Cannot move pieces in finished game.");
         }
     }
 }

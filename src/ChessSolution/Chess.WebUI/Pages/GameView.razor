@@ -8,8 +8,15 @@
         <BoardView GameId="@GameId" BoardViewModel="@BoardViewModel" />
     </div>
 
-    <MovesView BoardViewModel="@BoardViewModel" />
-
+    <div class="game-controls-container">
+        <div style="height:100%">
+            <MovesView BoardViewModel="@BoardViewModel" />
+        </div>
+        <div class="game-controls">
+            <button @onclick="@BoardViewModel.Resign" >Resign</button>
+            <button>Draw</button>
+        </div>
+    </div>
 </div>
 
 

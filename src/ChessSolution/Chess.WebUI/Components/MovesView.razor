@@ -13,10 +13,10 @@
     </div>
 
     <div class="navigator-controls-container">
-        <button @onclick="@BoardViewModel.ToStart" >|&lt;</button>
-        <button @onclick="@BoardViewModel.PreviousMove" >&lt;</button>
-        <button @onclick="@BoardViewModel.NextMove" >&gt;</button>
-        <button @onclick="@BoardViewModel.ToLastMove" >&gt;|</button>
+        <button @onclick="@BoardViewModel.ToStart" >|<i class="fa fa-angle-left"></i></button>
+        <button @onclick="@BoardViewModel.PreviousMove" ><i class="fa fa-angle-left"></i></button>
+        <button @onclick="@BoardViewModel.NextMove" ><i class="fa fa-angle-right"></i></button>
+        <button @onclick="@BoardViewModel.ToLastMove" ><i class="fa fa-angle-right">|</i></button>
     </div>
 </div>
 

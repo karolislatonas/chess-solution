@@ -2,3 +2,26 @@
     display: flex;
     align-items: flex-start;
 }
+
+.game-controls-container {
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+    .game-controls-container > div:nth-child(n+2) {
+        padding: 5px 0 0 0;
+    }
+
+.game-controls {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+    .game-controls > button:nth-child(n+2) {
+        margin: 0 5px 0 0
+    }
+
+

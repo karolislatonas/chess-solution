@@ -6,6 +6,9 @@ namespace Chess.Domain
     {
         public Game(string id, string whitePlayerId, string blackPlayerId)
         {
+            EnsurePlayerIdIsValid(whitePlayerId);
+            EnsurePlayerIdIsValid(blackPlayerId);
+
             GameId = id;
             WhitePlayerId = whitePlayerId;
             BlackPlayerId = blackPlayerId;
@@ -59,6 +62,12 @@ namespace Chess.Domain
                 default:
                     throw new Exception();
             }
+        }
+
+        private void EnsurePlayerIdIsValid(string playerId)
+        {
+            if (string.IsNullOrEmpty(playerId))
+                throw new ArgumentException("Player id cannot be empty");
         }
     }
 }

@@ -18,6 +18,7 @@ namespace Chess.WebUI.ViewModels
 {
     public class BoardViewModel : IAsyncDisposable
     {
+        private readonly GameService gameService;
         private readonly MovementService movementService;
         private readonly ISubscriptionProvider subscriptionProvider;
         private readonly PieceMover pieceMover;
@@ -26,13 +27,17 @@ namespace Chess.WebUI.ViewModels
         private readonly MoveSequenceTranslator movesSequenceTranslator;
         
         private string gameId;
+        private string whitePlayerId;
+        private string blackPlayerId;
+
         private ISubscriber movesSubscriber;
         private ChessColor viewPerspective;
 
         public event Action OnStateChanged;
 
-        public BoardViewModel(MovementService movementService, ISubscriptionProvider subscriptionProvider)
+        public BoardViewModel(GameService gameService, MovementService movementService, ISubscriptionProvider subscriptionProvider)
         {
+            this.gameService = gameService;
             this.movementService = movementService;
             this.subscriptionProvider = subscriptionProvider;
 
@@ -77,6 +82,13 @@ namespace Chess.WebUI.ViewModels
                 Array.Empty<IMove>();
                 
             SelectedPiece = new PieceSelection(location, piece, availableMoves);
+        }
+
+        public async Task Resign()
+        {
+            var playerToResignId = GetPlayerIdByColor(viewPerspective);
+
+            await gameService.Resign(gameId, playerToResignId);
         }
 
         public void ClearPieceSelection()
@@ -165,10 +177,19 @@ namespace Chess.WebUI.ViewModels
         {
             gameId = initialiseGameId;
 
+            await InitialiseGameAsync();
             await InitialiseMovesAsync();
             ToLastMove();
 
             await SubscribeForNewMovesAsync();
+        }
+
+        private async Task InitialiseGameAsync()
+        {
+            var gameResponse = await gameService.GetGameAsync(gameId);
+
+            whitePlayerId = gameResponse.WhitePlayerId;
+            blackPlayerId = gameResponse.BlackPlayerId;
         }
 
         private async Task InitialiseMovesAsync()
@@ -210,6 +231,16 @@ namespace Chess.WebUI.ViewModels
         private void NotifyStateChanged()
         {
             OnStateChanged?.Invoke();
+        }
+
+        private string GetPlayerIdByColor(ChessColor color)
+        {
+            return color switch
+            {
+                ChessColor.White => whitePlayerId,
+                ChessColor.Black => blackPlayerId,
+                _ => throw new Exception($"Failed to handle color:{color} when selecting playerId by color")
+            };
         }
 
         public async ValueTask DisposeAsync()

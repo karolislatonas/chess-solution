@@ -22,7 +22,7 @@ namespace Chess.Api.Translators
             {
                 GameId = game.GameId,
                 WhitePlayerId = game.WhitePlayerId,
-                BlakcPlayerId = game.BlackPlayerId
+                BlackPlayerId = game.BlackPlayerId
             };
         }
 

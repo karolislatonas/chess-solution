@@ -1,8 +1,7 @@
 ﻿
 
 .moves-navigator {
-    border: 1px solid;
-    border-radius: 5px;
+    height:100%;
     display: flex;
     flex-flow: column;
     justify-content: space-between;
@@ -26,6 +25,6 @@
     white-space: nowrap;
 }
 
-
-
-
+    .navigator-controls-container > button:nth-child(n+2) {
+        margin: 0 0 0 5px;
+    }
