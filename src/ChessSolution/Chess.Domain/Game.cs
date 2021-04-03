@@ -4,14 +4,15 @@ namespace Chess.Domain
 {
     public class Game
     {
+        private readonly Player whitePlayer;
+        private readonly Player blackPlayer;
+
         public Game(string id, string whitePlayerId, string blackPlayerId)
         {
-            EnsurePlayerIdIsValid(whitePlayerId);
-            EnsurePlayerIdIsValid(blackPlayerId);
-
             GameId = id;
-            WhitePlayerId = whitePlayerId;
-            BlackPlayerId = blackPlayerId;
+
+            whitePlayer = Player.AsWhite(whitePlayerId);
+            blackPlayer = Player.AsBlack(blackPlayerId);
         }
 
         public string GameId { get; }
@@ -20,15 +21,15 @@ namespace Chess.Domain
 
         public bool IsFinished => Result.HasValue;
 
-        public string WhitePlayerId { get; }
+        public string WhitePlayerId => whitePlayer.Id;
 
-        public string BlackPlayerId { get; }
+        public string BlackPlayerId => blackPlayer.Id;
 
         public void ResignByPlayer(string playerId)
         {
-            var resignedBy = GetPlayerColor(playerId);
+            var resignedByPlayer = GetPlayerById(playerId);
 
-            UpdateGameResult(resignedBy);
+            Result = resignedByPlayer.GetResignResult();
         }
 
         public void MakeDraw()
@@ -36,38 +37,15 @@ namespace Chess.Domain
             Result = GameResult.Draw;
         }
 
-        private ChessColor GetPlayerColor(string playerId)
+        private Player GetPlayerById(string playerId)
         {
-            if (playerId == WhitePlayerId)
-                return ChessColor.White;
+            if (playerId == whitePlayer.Id)
+                return whitePlayer;
 
-            if (playerId == BlackPlayerId)
-                return ChessColor.Black;
+            if (playerId == blackPlayer.Id)
+                return blackPlayer;
 
             throw new Exception($"Missing player {playerId ?? "NULL"} in game {GameId}");
-        }
-
-        private void UpdateGameResult(ChessColor resignedBy)
-        {
-            switch (resignedBy)
-            {
-                case ChessColor.White:
-                    Result = GameResult.WonByBlack;
-                    return;
-
-                case ChessColor.Black:
-                    Result = GameResult.WonByWhite;
-                    return;
-
-                default:
-                    throw new Exception();
-            }
-        }
-
-        private void EnsurePlayerIdIsValid(string playerId)
-        {
-            if (string.IsNullOrEmpty(playerId))
-                throw new ArgumentException("Player id cannot be empty");
         }
     }
 }
