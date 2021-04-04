@@ -1,4 +1,5 @@
 ﻿using Chess.Api.DataContracts;
+using Chess.Shared.DataContracts.Translations;
 using Chess.Domain;
 
 namespace Chess.Api.Translators
@@ -11,7 +12,8 @@ namespace Chess.Api.Translators
             {
                 GameId = game.GameId,
                 WhitePlayerId = game.WhitePlayerId,
-                BlackPlayerId = game.BlackPlayerId
+                BlackPlayerId = game.BlackPlayerId,
+                Result = game.Result.AsDto()
             };
         }
     }

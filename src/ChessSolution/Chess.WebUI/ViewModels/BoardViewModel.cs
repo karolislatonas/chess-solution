@@ -182,11 +182,15 @@ namespace Chess.WebUI.ViewModels
         {
             gameId = initialiseGameId;
 
-            await InitialiseGameAsync();
-            await InitialiseMovesAsync();
+            var initialiseGameTask = InitialiseGameAsync();
+            var initialiseMovesTask = InitialiseMovesAsync();
+
+            await Task.WhenAll(initialiseGameTask, initialiseMovesTask);
+
             ToLastMove();
 
-            await SubscribeForNewMovesAsync();
+            if(!IsGameFinished)
+                await SubscribeForNewMovesAsync();
         }
 
         private async Task InitialiseGameAsync()
@@ -195,6 +199,7 @@ namespace Chess.WebUI.ViewModels
 
             whitePlayerId = gameResponse.WhitePlayerId;
             blackPlayerId = gameResponse.BlackPlayerId;
+            Result = gameResponse.Result.AsDomain();
         }
 
         private async Task InitialiseMovesAsync()
