@@ -9,16 +9,23 @@ namespace Chess.Domain.Movement.Movers
 {
     public class CastleMover : IMover
     {
+        private static readonly IEnumerable<IMove> NoMoves = Enumerable.Empty<IMove>();
+
         public IEnumerable<IMove> GetAvailableMovesFrom(Board board, MovesLog movesLog, Location from)
         {
-            if (!IsInitialKingPosition(from))
-                return Enumerable.Empty<IMove>();
-
             var king = board.GetPieceAt<King>(from);
+
+            var kingInitialPosition = GetInitialKingPosition(king.Color);
+            
+            var kingWasMoved = WasMoveFrom(kingInitialPosition, movesLog);
+
+            if (kingWasMoved)
+                return NoMoves;
 
             var rookLocationsForCastle = GetRookLocationsForCastle(board, from);
 
             return rookLocationsForCastle
+                .Where(rookLoc => !WasMoveFrom(rookLoc, movesLog))
                 .Select(rookLoc => GetCastlePassingLocation(from, rookLoc))
                 .Where(locs => CanKingPassLocations(board, from, king.Color, locs))
                 .Select(locs => locs.Last())
@@ -30,10 +37,14 @@ namespace Chess.Domain.Movement.Movers
             return false;
         }
 
-        private bool IsInitialKingPosition(Location location)
+        private Location GetInitialKingPosition(ChessColor chessColor)
         {
-            return location == new Location(5, 1) ||
-                location == new Location(5, 8);
+            return chessColor switch
+            {
+                ChessColor.White => new Location(5, 1),
+                ChessColor.Black => new Location(5, 8),
+                _ => throw new ArgumentException($"Cannot determine initial king location for {chessColor}")
+            };
         }
 
         private bool CanKingPassLocations(Board board, Location kingLocation, ChessColor kingColor, Location[] passingLocations)
@@ -89,6 +100,11 @@ namespace Chess.Domain.Movement.Movers
             }
 
             return true;
+        }
+
+        private bool WasMoveFrom(Location from, MovesLog movesLog)
+        {
+            return movesLog.Any(m => m.Move.From == from);
         }
     }
 }
