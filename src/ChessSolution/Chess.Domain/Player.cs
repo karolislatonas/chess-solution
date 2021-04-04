@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Chess.Domain.Extensions;
+using System;
 
 namespace Chess.Domain
 {
@@ -16,29 +17,16 @@ namespace Chess.Domain
 
         public ChessColor PlaysAs { get; }
 
-        public GameResult GetResignResult()
-        {
-            switch (PlaysAs)
-            {
-                case ChessColor.White:
-                    return GameResult.WonByBlack;
+        public ChessColor OpponentColor() => PlaysAs.GetOpposite();
 
-                case ChessColor.Black:
-                    return GameResult.WonByWhite;
+        public static Player AsWhite(string id) => new Player(id, ChessColor.White);
 
-                default:
-                    throw new Exception();
-            }
-        }
+        public static Player AsBlack(string id) => new Player(id, ChessColor.Black);
 
         private void EnsurePlayerIdIsValid(string playerId)
         {
             if (string.IsNullOrEmpty(playerId))
                 throw new ArgumentException("Player id cannot be empty");
         }
-
-        public static Player AsWhite(string id) => new Player(id, ChessColor.White);
-
-        public static Player AsBlack(string id) => new Player(id, ChessColor.Black);
     }
 }

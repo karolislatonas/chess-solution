@@ -8,6 +8,7 @@ using Chess.Shared.DataContracts;
 using Chess.Shared.DataContracts.Translations;
 using System;
 using System.Linq;
+using Chess.Domain.Extensions;
 
 namespace Chess.UseCases
 {
@@ -16,12 +17,15 @@ namespace Chess.UseCases
         private readonly IGamesRepository gamesRepository;
         private readonly IMovesRepository movesRepository;
         private readonly IServiceBus serviceBus;
+        private readonly PieceMover pieceMover;
 
         public MovePieceCommandHandler(IGamesRepository gamesRepository, IMovesRepository movesRepository, IServiceBus serviceBus)
         {
             this.gamesRepository = gamesRepository;
             this.movesRepository = movesRepository;
             this.serviceBus = serviceBus;
+
+            pieceMover = new PieceMover();
         }
 
         public override int ExecuteCommand(MovePieceCommand command)
@@ -29,22 +33,57 @@ namespace Chess.UseCases
             var game = gamesRepository.GetGame(command.GameId);
 
             EnsureGameNotFinished(game);
-    
-            var movesLog = GetMovesLog(command.GameId);
-            var board = CreateBoard(movesLog);
+
+            var movesReplayer = ApplyNewMove(command);
+            var movesLog = movesReplayer.MovesLog;
+            var board = movesReplayer.Board;
+
+            SaveAndPublishLastMove(command.GameId, movesLog);
+            UpdateAndNotifyIfGameFinished(game, board, movesLog);
+
+            return movesLog.LastMove.SequenceNumber;
+        }
+
+        private MovesReplayer ApplyNewMove(MovePieceCommand command)
+        {
+            var movesReplayer = GetMovesReplayer(command.GameId);
+            var movesLog = movesReplayer.MovesLog;
+            var board = movesReplayer.Board;
 
             var from = command.From.AsDomain();
             var to = command.To.AsDomain();
 
             EnsureIsPlayerTurn(board, movesLog, from);
-            EnsureIsValidMove(board, movesLog, from, to);
 
-            var pieceMove = new PieceMove(movesLog.NextMoveSequenceNumber(), from, to);
-            
-            SaveMove(command.GameId, pieceMove);
-            PublishPieceMovedEvent(command.GameId, pieceMove);
+            var move = pieceMover.GetMove(board, movesLog, from, to);
+            movesReplayer.AddMoveAndReplay(move);
 
-            return movesLog.NextMoveSequenceNumber();
+            return movesReplayer;
+        }
+
+        private void SaveAndPublishLastMove(string gameId, MovesLog movesLog)
+        {
+            var lastMove = movesLog.LastMove;
+            var pieceMove = new PieceMove(lastMove.SequenceNumber, lastMove.Move.From, lastMove.Move.To);
+
+            SaveMove(gameId, pieceMove);
+
+            PublishPieceMovedEvent(gameId, pieceMove);
+        }
+
+        private void UpdateAndNotifyIfGameFinished(Game game, Board board, MovesLog movesLog)
+        {
+            var turnsTracker = new TurnsTracker(movesLog);
+            var playerToMove = turnsTracker.GetCurrentPlayerToMove();
+            var opponentCanMove = pieceMover.CanPlayerMove(board, movesLog, playerToMove);
+
+            if (opponentCanMove)
+                return;
+
+            var winner = playerToMove.GetOpposite();
+            game.UpdateResultToWin(winner);
+            gamesRepository.UpdateGame(game);
+            PublishGameFinishedEvent(game);
         }
 
         private void EnsureGameNotFinished(Game game)
@@ -67,7 +106,7 @@ namespace Chess.UseCases
                 throw new Exception("Wrong player moving");
         }
 
-        private MovesLog GetMovesLog(string gameId)
+        private MovesReplayer GetMovesReplayer(string gameId)
         {
             var movesSequenceTranslator = new MoveSequenceTranslator();
 
@@ -75,23 +114,9 @@ namespace Chess.UseCases
                 .GetGameMoves(gameId)
                 .Select(movesSequenceTranslator.TranslateNextMove);
 
-            return new MovesLog(allMoves);
-        }
+            var movesReplayer = MovesReplayer.CreateAndReplay(new MovesLog(allMoves));
 
-        private Board CreateBoard(MovesLog movesLog)
-        {
-            var board = new Board();
-
-            board.ApplyMoves(movesLog.Select(m => m.Move));
-
-            return board;
-        }
-
-        private void EnsureIsValidMove(Board board, MovesLog movesLog, Location from, Location to)
-        {
-            var pieceMover = new PieceMover();
-
-            pieceMover.EnsureIsValidMove(board, movesLog, from, to);
+            return movesReplayer;
         }
 
         private void PublishPieceMovedEvent(string gameId, PieceMove move)
@@ -99,12 +124,16 @@ namespace Chess.UseCases
             serviceBus.Publish(new PieceMovedEvent
             {
                 GameId = gameId,
-                PieceMove = new PieceMoveDto
-                {
-                    SequenceNumber = move.SequenceNumber,
-                    From = move.From.AsDto(),
-                    To = move.To.AsDto()
-                }
+                PieceMove = move.AsDto()
+            });
+        }
+
+        private void PublishGameFinishedEvent(Game game)
+        {
+            serviceBus.Publish(new GameFinishedEvent
+            {
+                GameId = game.GameId,
+                Result = game.Result.Value.AsDto()
             });
         }
     }

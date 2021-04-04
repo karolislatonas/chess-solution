@@ -5,7 +5,7 @@ namespace Chess.Domain.Movement
 {
     public class MovesReplayer
     {
-        public MovesReplayer(MovesLog movesLog)
+        private MovesReplayer(MovesLog movesLog)
         {   
             MovesLog = movesLog;
             Board = new Board();
@@ -30,6 +30,12 @@ namespace Chess.Domain.Movement
         public void AddMoves(IEnumerable<IMove> moves)
         {
             MovesLog.AddMoves(moves);
+        }
+
+        public void AddMoveAndReplay(IMove move)
+        {
+            AddMove(move);
+            ToLastMove();
         }
 
         public void AddMove(IMove move)
@@ -70,6 +76,24 @@ namespace Chess.Domain.Movement
                 Reset();
                 ApplyMoves(1, sequenceNumber);
             }
+        }
+
+        public static MovesReplayer CreateAndReplay(MovesLog movesLog)
+        {
+            var movesReplayer = new MovesReplayer(movesLog);
+            movesReplayer.ToLastMove();
+
+            return movesReplayer;
+        }
+
+        public static MovesReplayer Create(MovesLog movesLog)
+        {
+            return new MovesReplayer(movesLog);
+        }
+
+        public static MovesReplayer Create()
+        {
+            return Create(new MovesLog());
         }
 
         private int PreviousMoveNumber() => CurrentMoveNumber - 1;

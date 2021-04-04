@@ -19,6 +19,15 @@ namespace Chess.Domain.Movement
             }
         }
 
+        public IMove GetMove(Board board, MovesLog movesLog, Location from, Location to)
+        {
+            var piece = board.GetPieceAt(from);
+
+            return piece.Mover
+                .GetAvailableMovesFrom(board, movesLog, from)
+                .First(m => m.To == to);
+        }
+
         public IMove[] GetAvailableMoves(Board board, MovesLog movesLog, Location from)
         {
             return EnumerateAvailableMoves(board, movesLog, from).ToArray();

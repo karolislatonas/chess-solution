@@ -1,16 +1,17 @@
 ﻿using Chess.Domain.Movement.Moves;
 using System;
-using System.Linq;
 
 namespace Chess.Domain.Movement
 {
     public class MoveSequenceTranslator
     {
+        private readonly PieceMover pieceMover;
         private readonly MovesReplayer movesReplayer;
 
         public MoveSequenceTranslator()
         {
-            movesReplayer = new MovesReplayer(new MovesLog());
+            movesReplayer = MovesReplayer.Create();
+            pieceMover = new PieceMover();
         }
 
         public IMove TranslateNextMove(PieceMove pieceMove)
@@ -22,14 +23,9 @@ namespace Chess.Domain.Movement
 
         public IMove TranslateNextMove(Location from, Location to)
         {
-            var piece = movesReplayer.Board.GetPieceAt(from);
+            var move = pieceMover.GetMove(movesReplayer.Board, movesReplayer.MovesLog, from, to);
 
-            var move = piece.Mover
-                .GetAvailableMovesFrom(movesReplayer.Board, movesReplayer.MovesLog, from)
-                .First(m => m.To == to);
-
-            movesReplayer.AddMove(move);
-            movesReplayer.ToLastMove();
+            movesReplayer.AddMoveAndReplay(move);
 
             return move;
         }

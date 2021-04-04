@@ -46,7 +46,7 @@ namespace Chess.WebUI.ViewModels
 
             pieceMover = new PieceMover();
             movesSequenceTranslator = new MoveSequenceTranslator();
-            movesReplayer = new MovesReplayer(new MovesLog());
+            movesReplayer = MovesReplayer.Create(new MovesLog());
             turnsTracker = new TurnsTracker(movesReplayer.MovesLog);
         }
 
