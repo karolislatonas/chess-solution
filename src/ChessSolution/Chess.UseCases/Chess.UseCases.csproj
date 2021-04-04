@@ -9,6 +9,7 @@
     <ProjectReference Include="..\Chess.Data\Chess.Data.csproj" />
     <ProjectReference Include="..\Chess.Messages\Chess.Messages.csproj" />
     <ProjectReference Include="..\Chess.Messaging\Chess.Messaging.csproj" />
+    <ProjectReference Include="..\Chess.Shared.DataContracts.Translations\Chess.Shared.DataContracts.Translations.csproj" />
   </ItemGroup>
 
 </Project>

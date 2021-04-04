@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Chess.Api.Client\Chess.Api.Client.csproj" />
     <ProjectReference Include="..\Chess.Api.DataContracts\Chess.Api.DataContracts.csproj" />
     <ProjectReference Include="..\Chess.Domain\Chess.Domain.csproj" />
+    <ProjectReference Include="..\Chess.Shared.DataContracts.Translations\Chess.Shared.DataContracts.Translations.csproj" />
   </ItemGroup>
 
 </Project>

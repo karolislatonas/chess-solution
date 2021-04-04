@@ -2,10 +2,10 @@
 using Chess.Messaging;
 using Chess.Api.Translators;
 using Chess.Data;
-using Chess.Messages.Events;
 using Chess.UseCases;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Chess.Shared.DataContracts.Translations;
 
 namespace Chess.Api.Controllers
 {
@@ -31,7 +31,7 @@ namespace Chess.Api.Controllers
             var response = new PieceMovesResponseDto
             {
                 GameId = gameId,
-                Moves = allGameMoves.Select(m => m.AsDataContract()).ToArray()
+                Moves = allGameMoves.Select(m => m.AsDto()).ToArray()
             };
 
             return Ok(response);
@@ -65,7 +65,7 @@ namespace Chess.Api.Controllers
             return new PieceMoveResponseDto
             {
                 GameId = gameId,
-                Move = move.AsDataContract()
+                Move = move.AsDto()
             };
         }
 

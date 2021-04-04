@@ -2,6 +2,7 @@
 using Chess.Messages.Events;
 using Chess.Messaging;
 using Chess.Shared.DataContracts;
+using Chess.Shared.DataContracts.Translations;
 using Chess.SignalR.Typings;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
@@ -61,12 +62,7 @@ namespace Chess.Api.Notification.Notifiers
                 .Select(m => new PieceMovedEvent
                 {
                     GameId = gameId,
-                    PieceMove = new PieceMoveDto
-                    {
-                        SequenceNumber = m.SequenceNumber,
-                        From = m.From.AsDataContract(),
-                        To = m.To.AsDataContract()
-                    }
+                    PieceMove = m.AsDto()
                 });
 
             int? lastSequenceNumberPublished = null;

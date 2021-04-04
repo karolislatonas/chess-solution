@@ -11,9 +11,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Chess.Messages.Events;
 using Chess.Api.Client.Subscription.Subscribers;
-using Chess.WebUI.Translations;
 using Chess.Domain.Extensions;
 using Chess.Shared.DataContracts;
+using Chess.Shared.DataContracts.Translations;
 
 namespace Chess.WebUI.ViewModels
 {

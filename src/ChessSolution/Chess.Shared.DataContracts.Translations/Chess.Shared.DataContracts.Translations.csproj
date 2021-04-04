@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Chess.Domain\Chess.Domain.csproj" />
+    <ProjectReference Include="..\Chess.Shared.DataContracts\Chess.Shared.DataContracts.csproj" />
+  </ItemGroup>
+
+</Project>

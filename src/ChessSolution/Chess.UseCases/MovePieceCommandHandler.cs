@@ -5,7 +5,7 @@ using Chess.Messages.Commands;
 using Chess.Messages.Events;
 using Chess.Messaging;
 using Chess.Shared.DataContracts;
-using Chess.UseCases.Translators;
+using Chess.Shared.DataContracts.Translations;
 using System;
 using System.Linq;
 
@@ -102,8 +102,8 @@ namespace Chess.UseCases
                 PieceMove = new PieceMoveDto
                 {
                     SequenceNumber = move.SequenceNumber,
-                    From = move.From.AsMessage(),
-                    To = move.To.AsMessage()
+                    From = move.From.AsDto(),
+                    To = move.To.AsDto()
                 }
             });
         }

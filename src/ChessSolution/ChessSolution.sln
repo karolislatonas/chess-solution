@@ -29,6 +29,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.SignalR.Typings", "Ch
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Shared.DataContracts", "Chess.Shared.DataContracts\Chess.Shared.DataContracts.csproj", "{48009C78-37C9-45E0-9FA4-859E84AB7334}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Shared.DataContracts.Translations", "Chess.Shared.DataContracts.Translations\Chess.Shared.DataContracts.Translations.csproj", "{7F94BE71-2AF9-4AA9-9449-40B6556A3FA9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F94BE71-2AF9-4AA9-9449-40B6556A3FA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F94BE71-2AF9-4AA9-9449-40B6556A3FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F94BE71-2AF9-4AA9-9449-40B6556A3FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F94BE71-2AF9-4AA9-9449-40B6556A3FA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

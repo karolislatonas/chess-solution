@@ -3,7 +3,7 @@ using Chess.Domain;
 using Chess.Messages.Commands;
 using Chess.Messages.Events;
 using Chess.Messaging;
-using Chess.UseCases.Translators;
+using Chess.Shared.DataContracts.Translations;
 using System;
 
 namespace Chess.UseCases
@@ -39,7 +39,7 @@ namespace Chess.UseCases
             var gameFinishedEvent = new GameFinishedEvent
             {
                 GameId = game.GameId,
-                Result = game.Result.Value.AsMessage()
+                Result = game.Result.Value.AsDto()
             };
 
             serviceBus.Publish(gameFinishedEvent);

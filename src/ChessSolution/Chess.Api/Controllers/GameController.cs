@@ -64,7 +64,7 @@ namespace Chess.Api.Controllers
 
         private GameResponseDto FindGame(string gameId)
         {
-            return gameRepository.GetGame(gameId).AsDataContract();
+            return gameRepository.GetGame(gameId).AsDto();
         }
 
     }
