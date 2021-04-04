@@ -1,6 +1,7 @@
 ﻿using Chess.Api.DataContracts;
 using Chess.Domain;
 using Chess.Domain.Movement;
+using Chess.Shared.DataContracts;
 
 namespace Chess.Api.Translators
 {
@@ -26,7 +27,7 @@ namespace Chess.Api.Translators
             };
         }
 
-        private static LocationDto AsDataContract(this Location location)
+        public static LocationDto AsDataContract(this Location location)
         {
             return new LocationDto
             {

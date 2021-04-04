@@ -83,14 +83,5 @@ namespace Chess.Domain.Movement
 
             return movesSequence.Last.SequenceNumber;
         }
-
-        private void EnsureAreEqual(int num1, int num2, Action throwAction)
-        {
-            if (num1 != num2)
-                throwAction();
-
-        }
-
-      
     }
 }

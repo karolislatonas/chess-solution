@@ -1,12 +1,13 @@
 ﻿using Chess.Data;
-using Chess.Messages;
 using Chess.Messages.Events;
 using Chess.Messaging;
+using Chess.Shared.DataContracts;
 using Chess.SignalR.Typings;
 using Microsoft.AspNetCore.SignalR;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
+using Chess.Api.Translators;
 
 namespace Chess.Api.Notification.Notifiers
 {
@@ -60,9 +61,12 @@ namespace Chess.Api.Notification.Notifiers
                 .Select(m => new PieceMovedEvent
                 {
                     GameId = gameId,
-                    SequenceNumber = m.SequenceNumber,
-                    From = new LocationDto { Column = m.From.Column, Row = m.From.Row },
-                    To = new LocationDto { Column = m.To.Column, Row = m.To.Row }
+                    PieceMove = new PieceMoveDto
+                    {
+                        SequenceNumber = m.SequenceNumber,
+                        From = m.From.AsDataContract(),
+                        To = m.To.AsDataContract()
+                    }
                 });
 
             int? lastSequenceNumberPublished = null;
@@ -70,7 +74,7 @@ namespace Chess.Api.Notification.Notifiers
             foreach (var movedEvent in movedEvents)
             {
                 await OnPieceMovedAsync(movedEvent);
-                lastSequenceNumberPublished = movedEvent.SequenceNumber;
+                lastSequenceNumberPublished = movedEvent.PieceMove.SequenceNumber;
             }
 
             return lastSequenceNumberPublished;
@@ -82,11 +86,11 @@ namespace Chess.Api.Notification.Notifiers
 
             while (queue.TryDequeue(out var movedEvent))
             {
-                if (movedEvent.SequenceNumber <= lastSequenceNumberPublished)
+                if (movedEvent.PieceMove.SequenceNumber <= lastSequenceNumberPublished)
                     continue;
 
                 await OnPieceMovedAsync(movedEvent);
-                lastSequenceNumberPublished = movedEvent.SequenceNumber;
+                lastSequenceNumberPublished = movedEvent.PieceMove.SequenceNumber;
             }
         }
 

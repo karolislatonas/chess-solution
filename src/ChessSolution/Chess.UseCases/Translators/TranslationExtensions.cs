@@ -1,5 +1,6 @@
-﻿using Chess.Domain.Movement;
-using Chess.Messages;
+﻿using Chess.Domain;
+using Chess.Domain.Movement;
+using Chess.Shared.DataContracts;
 using System;
 
 namespace Chess.UseCases.Translators
@@ -20,13 +21,13 @@ namespace Chess.UseCases.Translators
             };
         }
 
-        public static GameResult AsMessage(this Domain.GameResult gameResult)
+        public static GameResultDto AsMessage(this GameResult gameResult)
         {
             return gameResult switch
             {
-                Domain.GameResult.Draw => GameResult.Draw,
-                Domain.GameResult.WonByBlack => GameResult.WonByBlack,
-                Domain.GameResult.WonByWhite => GameResult.WonByWhite,
+                GameResult.Draw => GameResultDto.Draw,
+                GameResult.WonByBlack => GameResultDto.WonByBlack,
+                GameResult.WonByWhite => GameResultDto.WonByWhite,
 
                 _ => throw new Exception()
             };

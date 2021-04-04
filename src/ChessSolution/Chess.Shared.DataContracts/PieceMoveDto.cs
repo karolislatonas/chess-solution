@@ -1,4 +1,4 @@
-﻿namespace Chess.Api.DataContracts
+﻿namespace Chess.Shared.DataContracts
 {
     public class PieceMoveDto
     {

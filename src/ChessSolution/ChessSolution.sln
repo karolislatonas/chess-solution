@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.Messaging", "Chess.Me
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chess.SignalR.Typings", "Chess.SignalR.Typings\Chess.SignalR.Typings.csproj", "{6711DF66-24FD-4D38-ACAF-964D5A9CE8D7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chess.Shared.DataContracts", "Chess.Shared.DataContracts\Chess.Shared.DataContracts.csproj", "{48009C78-37C9-45E0-9FA4-859E84AB7334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{6711DF66-24FD-4D38-ACAF-964D5A9CE8D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6711DF66-24FD-4D38-ACAF-964D5A9CE8D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6711DF66-24FD-4D38-ACAF-964D5A9CE8D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48009C78-37C9-45E0-9FA4-859E84AB7334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,6 +4,7 @@ using Chess.Domain.Movement;
 using Chess.Messages.Commands;
 using Chess.Messages.Events;
 using Chess.Messaging;
+using Chess.Shared.DataContracts;
 using Chess.UseCases.Translators;
 using System;
 using System.Linq;
@@ -98,9 +99,12 @@ namespace Chess.UseCases
             serviceBus.Publish(new PieceMovedEvent
             {
                 GameId = gameId,
-                SequenceNumber = move.SequenceNumber,
-                From = move.From.AsMessage(),
-                To = move.To.AsMessage()
+                PieceMove = new PieceMoveDto
+                {
+                    SequenceNumber = move.SequenceNumber,
+                    From = move.From.AsMessage(),
+                    To = move.To.AsMessage()
+                }
             });
         }
     }

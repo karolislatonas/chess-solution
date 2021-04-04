@@ -4,8 +4,4 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Chess.Shared.DataContracts\Chess.Shared.DataContracts.csproj" />
-  </ItemGroup>
-
 </Project>

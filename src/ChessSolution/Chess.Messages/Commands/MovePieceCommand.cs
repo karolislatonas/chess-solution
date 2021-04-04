@@ -1,4 +1,6 @@
-﻿namespace Chess.Messages.Commands
+﻿using Chess.Shared.DataContracts;
+
+namespace Chess.Messages.Commands
 {
     public class MovePieceCommand
     {

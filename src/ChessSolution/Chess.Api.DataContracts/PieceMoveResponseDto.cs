@@ -1,4 +1,6 @@
-﻿namespace Chess.Api.DataContracts
+﻿using Chess.Shared.DataContracts;
+
+namespace Chess.Api.DataContracts
 {
     public class PieceMoveResponseDto
     {

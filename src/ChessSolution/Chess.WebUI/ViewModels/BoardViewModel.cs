@@ -13,6 +13,7 @@ using Chess.Messages.Events;
 using Chess.Api.Client.Subscription.Subscribers;
 using Chess.WebUI.Translations;
 using Chess.Domain.Extensions;
+using Chess.Shared.DataContracts;
 
 namespace Chess.WebUI.ViewModels
 {
@@ -217,8 +218,8 @@ namespace Chess.WebUI.ViewModels
 
         private void OnPieceMoved(PieceMovedEvent pieceMovedEvent)
         {
-            var from = new Location(pieceMovedEvent.From.Column, pieceMovedEvent.From.Row);
-            var to = new Location(pieceMovedEvent.To.Column, pieceMovedEvent.To.Row);
+            var from = pieceMovedEvent.PieceMove.From.AsDomain();
+            var to = pieceMovedEvent.PieceMove.To.AsDomain();
 
             var move = movesSequenceTranslator.TranslateNextMove(from, to);
 

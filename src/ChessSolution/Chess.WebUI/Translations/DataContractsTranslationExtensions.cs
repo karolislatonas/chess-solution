@@ -1,7 +1,7 @@
-﻿using Chess.Api.DataContracts;
-using Chess.Domain.Movement;
-using Chess.Domain;
+﻿using Chess.Domain.Movement;
 using System;
+using Chess.Shared.DataContracts;
+using Chess.Domain;
 
 namespace Chess.WebUI.Translations
 {
@@ -15,20 +15,20 @@ namespace Chess.WebUI.Translations
                 pieceMove.To.AsDomain());
         }
 
-        private static Location AsDomain(this LocationDto location)
+        public static Location AsDomain(this LocationDto location)
         {
             return new Location(location.Column, location.Row);
         }
 
-        public static GameResult AsDomain(this Messages.GameResult gameResult)
+        public static GameResult AsDomain(this GameResultDto gameResult)
         {
             return gameResult switch
             {
-                Messages.GameResult.WonByBlack => GameResult.WonByBlack,
-                Messages.GameResult.WonByWhite => GameResult.WonByWhite,
-                Messages.GameResult.Draw => GameResult.Draw,
+                GameResultDto.WonByBlack => GameResult.WonByBlack,
+                GameResultDto.WonByWhite => GameResult.WonByWhite,
+                GameResultDto.Draw => GameResult.Draw,
 
-                _ => throw new ArgumentException(),
+                _ => throw new ArgumentException("Failed to translate game result dto to domain"),
             };
         }
     }
